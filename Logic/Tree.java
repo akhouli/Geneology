@@ -17,6 +17,7 @@ public class Tree {
 	private Tree spouse;
 	private ArrayList<Tree> children;
 	private int familyID;
+	private int treeLevel;
 	
 	public Tree(int familyID) {
 		this.familyID = familyID;
@@ -97,6 +98,10 @@ public class Tree {
 		familyID = familyid;
 	}
 	
+	public void setTreeLevel(int treeLevel) {
+		this.treeLevel = treeLevel;
+	}
+	
 	/**
 	 * Getters
 	 * @return
@@ -153,6 +158,10 @@ public class Tree {
 		return familyID;
 	}
 	
+	public int getTreeLevel() {
+		return treeLevel;
+	}
+	
 	/**
 	 * deleteParent() should be called for nodes which have children so that they remain dummy nodes
 	 */
@@ -188,6 +197,7 @@ public class Tree {
 	public void addSpouse(Tree spouse) {
 		setSpouse(spouse);
 		getSpouse().setSpouse(this);
+		getSpouse().setTreeLevel(getTreeLevel());
 		if(children != null) {
 			getSpouse().setChildren(getChildren());
 			if(getSpouse().male) {
@@ -208,13 +218,13 @@ public class Tree {
 	 * @param child
 	 */
 	public void addChild(Tree child) {
+		child.setTreeLevel(getTreeLevel()+1);
 		ArrayList<Tree> childlist = new ArrayList<>();
 		if(getChildren() != null) {
 		childlist.addAll(getChildren());
 		}
 		childlist.add(child);
 		setChildren(childlist);
-		System.out.println("addChild " + getChildren());
 		if(getSpouse()!= null) {
 			getSpouse().setChildren(childlist);
 			if(getSpouse().getMale()) {
@@ -238,6 +248,7 @@ public class Tree {
 	 * @param parent
 	 */
 	public void addParent(Tree parent) {
+		parent.setTreeLevel(getTreeLevel()-1);
 		if(parent.getMale()) {
 			if(getFather() != null) {
 				if(getFather().getFirstName() == null && getFather().getChildren() != null) {
