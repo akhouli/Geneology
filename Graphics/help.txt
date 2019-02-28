@@ -1,0 +1,4 @@
+Welcome to Family Tree
+-----------------------
+About us:
+Family Tree is a geneology tree application
