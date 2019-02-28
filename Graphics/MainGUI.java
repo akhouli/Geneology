@@ -38,13 +38,29 @@ public class MainGUI extends Application {
         Text Title = new Text(300.0,100.0,("Family Tree"));
         Button submit= new Button("Submit");
         AudioClip test = new AudioClip(this.getClass().getResource("transcript.mp3").toString());
+        Label title = new Label ("Please enter the information for the first person:");
+        Label firstName = new Label("First Name: *");
+		Label lastName = new Label("Last Name: *");
+		Label birthlabel = new Label("BirthDate: *");
+		Label deathlabel = new Label("Date of Death: ");
+		Label birthplacelabel = new Label("Birth Country: *");
+		Label deathplacelabel = new Label("Died In : ");
+		Label Gender = new Label("Gender: *");
+		Label biography = new Label("Biography: ");
+		TextArea biographyArea = new TextArea();
+		DatePicker birthDate= new DatePicker ();
+		DatePicker deathDate= new DatePicker ();
+		TextField firstField = new TextField ();
+		TextField lastField = new TextField ();
+		RadioButton genderMale = new RadioButton("Male");
+		RadioButton genderFemale = new RadioButton("Female");
+		ToggleGroup toggle = new ToggleGroup();
+		genderMale.setToggleGroup(toggle);
+		genderMale.setSelected(true);
+		genderFemale.setToggleGroup(toggle);
+		Button Add= new Button("Create New");
         
-      
-//        if(!test.isPlaying()) {
-//        	test.play();
-//        }
-//        mediaPlayer =new MediaPlayer(new Media(this.getClass().getResource(name)))
-//        Number
+ 
         display X= new display();
         Image Tree = new Image("file:src/Graphics/tree.png");
         ImageView treeview= new ImageView();
@@ -100,44 +116,24 @@ public class MainGUI extends Application {
 				
 			}
 		};
+		ObservableList<String> cities = FXCollections.observableArrayList();
+        ComboBox<String> birthcountry = new ComboBox<String>(cities);
+        ComboBox<String> deathcountry = new ComboBox<String>(cities);
+
+        String[] locales1 = Locale.getISOCountries();
+        for (String countrylist : locales1) {
+            Locale obj = new Locale("", countrylist);
+            String[] city = { obj.getDisplayCountry() };
+            for (int x = 0; x < city.length; x++) {
+                cities.add(obj.getDisplayCountry());
+            }
+        }
+        birthcountry.setItems(cities);
+        deathcountry.setItems(cities);
+	    
 		EventHandler<MouseEvent> submitEvent = new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				ObservableList<String> cities = FXCollections.observableArrayList();
-                ComboBox<String> birthcountry = new ComboBox<String>(cities);
-                ComboBox<String> deathcountry = new ComboBox<String>(cities);
-
-                String[] locales1 = Locale.getISOCountries();
-                for (String countrylist : locales1) {
-                    Locale obj = new Locale("", countrylist);
-                    String[] city = { obj.getDisplayCountry() };
-                    for (int x = 0; x < city.length; x++) {
-                        cities.add(obj.getDisplayCountry());
-                    }
-                }
-                birthcountry.setItems(cities);
-                deathcountry.setItems(cities);
-                Label title = new Label ("Please enter the information for the first person:");
-                Label firstName = new Label("First Name: *");
-				Label lastName = new Label("Last Name: *");
-				Label birthlabel = new Label("BirthDate: *");
-				Label deathlabel = new Label("Date of Death: ");
-				Label birthplacelabel = new Label("Birth Country: *");
-				Label deathplacelabel = new Label("Died In : ");
-				Label Gender = new Label("Gender: *");
-				Label biography = new Label("Biography: ");
-				TextArea biographyArea = new TextArea();
-				DatePicker birthDate= new DatePicker ();
-				DatePicker deathDate= new DatePicker ();
-				TextField firstField = new TextField ();
-				TextField lastField = new TextField ();
-				RadioButton genderMale = new RadioButton("Male");
-				RadioButton genderFemale = new RadioButton("Female");
-				ToggleGroup toggle = new ToggleGroup();
-				genderMale.setToggleGroup(toggle);
-				genderMale.setSelected(true);
-				genderFemale.setToggleGroup(toggle);
-				Button Add= new Button("Create New");
 				Add.setLayoutX(920);
 				Add.setLayoutY(780);
 				Add.setScaleX(2);
@@ -199,6 +195,7 @@ public class MainGUI extends Application {
 				birthDate.setScaleY(1.5);
 				firstField.setScaleX(1.5);
 				firstField.setScaleY(1.5);
+				
 				firstField.setLayoutX(390);
 				firstField.setLayoutY(150);
 				lastField.setScaleX(1.5);
@@ -219,6 +216,46 @@ public class MainGUI extends Application {
 				
 			}
 		};
+		EventHandler<MouseEvent> CreateNew = new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
+		if((firstField.getText().equals(null)) || (lastField.getText().equals(null)) || (birthDate.getValue() == null)){
+			Label titleError = new Label ("First name, Last name & Birthdate must be filled");
+			titleError.setLayoutX(40);
+			titleError.setLayoutY(40);
+			titleError.setUnderline(true);
+			titleError.setFont(Font.font(30));
+			titleError.setTextFill(Color.RED);
+	       
+			Group creategroup = new Group(firstName,firstField,lastName,lastField,birthlabel
+					,birthDate,birthplacelabel,birthcountry,titleError,Gender,genderMale,genderFemale,
+					deathlabel,deathDate,deathplacelabel,deathcountry,biography,biographyArea,Add,helpButton,back);
+			Scene createscreen = new Scene(creategroup, 1100, 850);
+			createscreen.setFill(Color.MEDIUMSEAGREEN);
+			stage.setScene(createscreen);
+			}
+		else {
+			String first = firstField.getText();
+			String last= lastField.getText();
+			System.out.println(first);
+			System.out.println(last);
+			if(birthDate.getValue() != null) {
+			String birth = birthDate.getValue().toString();
+			System.out.println(birth);
+			}
+			if(birthcountry.getValue() != null) {
+			String birthplace = birthcountry.getValue().toString();
+			System.out.println(birthplace);
+			}
+			if(genderMale.isSelected()) {
+				System.out.println(genderMale.getText());
+			}
+			else {
+				System.out.println(genderFemale.getText());
+			}
+		}
+		
+		}
+	};
 		EventHandler<MouseEvent> createEvent = new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -227,7 +264,6 @@ public class MainGUI extends Application {
 				Label treeName = new Label("Tree Name:");
 				TextField treeField = new TextField ();
 				Label title = new Label ("Create New Tree");
-				
 				ImageView plusview= new ImageView();
 				ImageView treeview= new ImageView();
 				treeview.setImage(tree);
@@ -243,7 +279,6 @@ public class MainGUI extends Application {
 				title.setLayoutX(80);
 				title.setLayoutY(60);
 				title.setUnderline(true);
-
 				title.setFont(Font.font(80));
 		        title.setTextFill(Color.IVORY);
 				treeName.setLayoutX(150);
@@ -254,7 +289,6 @@ public class MainGUI extends Application {
 				treeField.setScaleY(2);
 				treeField.setLayoutX(390);
 				treeField.setLayoutY(350);
-				
 				Group creategroup = new Group(treeName,treeField,title,submit,helpButton,back,plusview, treeview);
 				Scene createscreen = new Scene(creategroup, 1100, 850);
 				createscreen.setFill(Color.MEDIUMSEAGREEN);
@@ -270,6 +304,7 @@ public class MainGUI extends Application {
        helpButton.addEventFilter(MouseEvent.MOUSE_CLICKED, helpEvent);
        Create.addEventFilter(MouseEvent.MOUSE_CLICKED, createEvent);
        submit.addEventFilter(MouseEvent.MOUSE_CLICKED, submitEvent);
+       Add.addEventFilter(MouseEvent.MOUSE_CLICKED, CreateNew);
        Group root = new Group(treeview,helpButton, Create,Title, Search,exit);
 
         Scene scene = new Scene(root, 1100, 850);
