@@ -1,10 +1,8 @@
-package Logic;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Tree {
 	
-	private int id;
 	private String firstname;
 	private String lastname;
 	private boolean male;
@@ -18,32 +16,10 @@ public class Tree {
 	private Tree spouse;
 	private ArrayList<Tree> children;
 	private int familyID;
-	private int treeLevel;
-	private double xpos = 0;
-	private int noNo;
-	private double ypos;
-	
 	
 	public Tree(int familyID) {
 		this.familyID = familyID;
 	}
-	
-	public Tree(String firstname, String lastname, int familyID) {
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.familyID = familyID;
-	}
-	
-	public Tree(int id, String firstname, String lastname, boolean male, String birthdate, String birthplace, int familyID) {
-		this.id = id;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.male = male;
-		this.birthdate = birthdate;
-		this.birthplace = birthplace;
-		this.familyID = familyID;
-	}
-	
 	public Tree(String firstname, String lastname, boolean male, String birthdate, String birthplace, int familyID) {
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -120,22 +96,6 @@ public class Tree {
 		familyID = familyid;
 	}
 	
-	public void setTreeLevel(int treeLevel) {
-		this.treeLevel = treeLevel;
-	}
-	
-	public void setXPos(double xpos) {
-		this.xpos = xpos;
-	}
-	
-	public void setNoNo(int noNo) {
-		this.noNo = noNo;
-	}
-	
-	public void setYPos(double ypos) {
-		this.ypos = ypos;
-	}
-	
 	/**
 	 * Getters
 	 * @return
@@ -192,22 +152,6 @@ public class Tree {
 		return familyID;
 	}
 	
-	public int getTreeLevel() {
-		return treeLevel;
-	}
-	
-	public double getXPos() {
-		return xpos;
-	}
-	
-	public int getNoNo() {
-		return noNo;
-	}
-	
-	public double getYPos() {
-		return ypos;
-	}
-	
 	/**
 	 * deleteParent() should be called for nodes which have children so that they remain dummy nodes
 	 */
@@ -243,7 +187,6 @@ public class Tree {
 	public void addSpouse(Tree spouse) {
 		setSpouse(spouse);
 		getSpouse().setSpouse(this);
-		getSpouse().setTreeLevel(getTreeLevel());
 		if(children != null) {
 			getSpouse().setChildren(getChildren());
 			if(getSpouse().male) {
@@ -264,13 +207,13 @@ public class Tree {
 	 * @param child
 	 */
 	public void addChild(Tree child) {
-		child.setTreeLevel(getTreeLevel()+1);
 		ArrayList<Tree> childlist = new ArrayList<>();
 		if(getChildren() != null) {
 		childlist.addAll(getChildren());
 		}
 		childlist.add(child);
 		setChildren(childlist);
+		System.out.println("addChild " + getChildren());
 		if(getSpouse()!= null) {
 			getSpouse().setChildren(childlist);
 			if(getSpouse().getMale()) {
@@ -294,7 +237,6 @@ public class Tree {
 	 * @param parent
 	 */
 	public void addParent(Tree parent) {
-		parent.setTreeLevel(getTreeLevel()-1);
 		if(parent.getMale()) {
 			if(getFather() != null) {
 				if(getFather().getFirstName() == null && getFather().getChildren() != null) {
@@ -320,7 +262,6 @@ public class Tree {
 		}
 		else {
 			setMother(parent);
-			parent.addChild(this);
 			if(getFather() != null) {
 				getFather().setSpouse(parent);
 				parent.setSpouse(getFather());
@@ -538,7 +479,6 @@ public class Tree {
 		System.out.println("\n" + Käthi);
 		
 		
-//		System.out.println("\n" + Hedi.getChildren());
 		
 	}
 
