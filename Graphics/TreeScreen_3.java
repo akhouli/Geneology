@@ -358,7 +358,7 @@ public class TreeScreen_3 extends Application{
 //		Jürg.addChild(Michel);
 ////////		Fritz.addParent(Käthi);
 //		ArrayList<Tree> trees = new ArrayList<>();
-////		ArrayList<Tree> trees = TreeScreenModel.getNodes();
+		ArrayList<Tree> trees = TreeScreenModel.getNodes();
 //////		System.out.println(trees);
 //		trees.add(Lilly);
 //		trees.add(Felix);
