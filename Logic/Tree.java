@@ -18,6 +18,10 @@ public class Tree {
 	private ArrayList<Tree> children;
 	private int familyID;
 	private int treeLevel;
+	public double pos;
+	public int noNo;
+	public double ypos;
+	
 	
 	public Tree(int familyID) {
 		this.familyID = familyID;
@@ -491,6 +495,7 @@ public class Tree {
 		System.out.println("\n" + Käthi);
 		
 		
+//		System.out.println("\n" + Hedi.getChildren());
 		
 	}
 
