@@ -404,12 +404,15 @@ public class TreeScreen_3 extends Application{
 
 		
 		Group r = new Group();
-		r.getChildren().addAll(TreeScreenModel.generateNodes(root, trees, primaryStage, focused).getChildren());
+		r.getChildren().addAll(root.getChildren());
+
+		System.out.println("gen class " + TreeScreenModel.generateNodes(root, trees, primaryStage, focused).getClass());
+		r.getChildren().addAll(TreeScreenModel.generateNodes(root, trees, primaryStage, focused));
 //		root.getChildren().
 		Scene scene = new Scene(r, 1100, 850);
 		scene.setFill(Color.MEDIUMSEAGREEN);
 
-		AddChildHandler ach = new AddChildHandler(primaryStage, scene, ch, parent);
+		AddChildHandler ach = new AddChildHandler(primaryStage, scene, r, ch, parent);
 		addChildButton.addEventFilter(MouseEvent.MOUSE_CLICKED, ach);
 		
 		primaryStage.setScene(scene);

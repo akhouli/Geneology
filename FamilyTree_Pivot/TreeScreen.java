@@ -1,24 +1,21 @@
 package FamilyTree_Pivot;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
-
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -77,225 +74,89 @@ public class TreeScreen extends Application{
 		 * creating the textbox that shows the information about a person when the person is selected
 		 */
 		int y = 100;
-		int ydiff = 30;
+		int x = 20;
 		
 		//the actual box
-		Rectangle textbox = new Rectangle(200, ydiff*9, Color.PALEGREEN);
+		Rectangle textbox = new Rectangle(200, 600, Color.PALEGREEN);
 		textbox.setX(15);
-		textbox.setY(y-ydiff);
+		textbox.setY(80);
 		textbox.setStrokeWidth(5);
 		textbox.setStroke(Color.BLACK);
 		
 		//the 'firstname' text that is always displayed
-		int xLabels = 20;
 		Text firstname = new Text("Firstname: " );
-		firstname.setX(xLabels);
-		firstname.setY(y);
 		firstname.setFont(Font.font("System Regular", FontWeight.BOLD, 11));
 		
 		//the 'lastname' text that is always displayed
 		Text lastname = new Text("Lastname: " );
-		lastname.setX(xLabels);
-		lastname.setY(y+ydiff);
 		lastname.setFont(Font.font("System Regular", FontWeight.BOLD, 11));
 		
 		//the 'gender' text that is always displayed
 		Text gender = new Text("Gender: " );
-		gender.setX(xLabels);
-		gender.setY(y+ydiff*2);
 		gender.setFont(Font.font("System Regular", FontWeight.BOLD, 11));
 		
 		//the birth date text that is always displayed
 		Text birthdate = new Text("Born on: " );
-		birthdate.setX(xLabels);
-		birthdate.setY(y+ydiff*3);
 		birthdate.setFont(Font.font("System Regular", FontWeight.BOLD, 11));
 		
 		//the birth place text that is always displayed
 		Text birthplace = new Text("Born in: ");
-		birthplace.setX(xLabels);
-		birthplace.setY(y+ydiff*4);
 		birthplace.setFont(Font.font("System Regular", FontWeight.BOLD, 11));
 		
 		//the death date text that is always displayed
 		Text deathdate = new Text("Died on: ");
-		deathdate.setX(xLabels);
-		deathdate.setY(y+ydiff*5);
 		deathdate.setFont(Font.font("System Regular", FontWeight.BOLD, 11));
 		
 		//the death place text that is always displayed
 		Text deathplace = new Text("Died in: ");
-		deathplace.setX(xLabels);
-		deathplace.setY(y+ydiff*6);
 		deathplace.setFont(Font.font("System Regular", FontWeight.BOLD, 11));
+
+
+		//where the info goes when hovered over
+		Label firstnameText = new Label("");
+		Label lastnameText = new Label("");
+		Label genderText = new Label("");
+		Label birthdateText = new Label("");
+		Label birthplaceText = new Label("");
+		Label deathdateText = new Label("");
+		Label deathplaceText = new Label("");
+
 		
-		//the 'biography' text that is always displayed
+		GridPane grid = new GridPane();
+		grid.setMaxSize(200, 300);
+		grid.setHgap(20);
+		grid.setVgap(10);
+		grid.setLayoutX(x);
+		grid.setLayoutY(y);
+		grid.add(firstname, 0, 1);
+		grid.add(firstnameText, 1, 1);
+		grid.add(lastname, 0, 2);
+		grid.add(lastnameText, 1, 2);
+		grid.add(gender, 0, 3);
+		grid.add(genderText, 1, 3);
+		grid.add(birthdate, 0, 4);
+		grid.add(birthdateText, 1, 4);
+		grid.add(birthplace, 0, 5);
+		grid.add(birthplaceText, 1, 5);
+		grid.add(deathdate, 0, 6);
+		grid.add(deathdateText, 1, 6);
+		grid.add(deathplace, 0, 7);
+		grid.add(deathplaceText, 1, 7);
+		
+		//bio
 		Text bio = new Text("Biography: ");
-		bio.setX(xLabels);
-		bio.setY(y+ydiff*7);
 		bio.setFont(Font.font("System Regular", FontWeight.BOLD, 11));
-		
-		VBox c = new VBox();
-//		c.getChildren().add(e)
-		
-		/**
-		 * creating the fields where the attributes of a person will be displayed
-		 */
-		int xDisplayText = 100;
-		
-		// firstname
-		Text firstnameText = new Text("");
-		firstnameText.setX(xDisplayText);
-		firstnameText.setY(y);
-		
-		//lastname
-		Text lastnameText = new Text("");
-		lastnameText.setX(xDisplayText);
-		lastnameText.setY(y+ydiff);
-		
-		//gender
-		Text genderText = new Text("");
-		genderText.setX(xDisplayText);
-		genderText.setY(y+ydiff*2);
-		
-		//birth date
-		Text birthdateText = new Text("");
-		birthdateText.setX(xDisplayText);
-		birthdateText.setY(y+ydiff*3);
-		
-		//birth place
-		Text birthplaceText = new Text("");
-		birthplaceText.setX(xDisplayText);
-		birthplaceText.setY(y+ydiff*4);
-		
-		//death date
-		Text deathdateText = new Text("");
-		deathdateText.setX(xDisplayText);
-		deathdateText.setY(y+ydiff*5);
-		
-		//death place
-		Text deathplaceText = new Text("");
-		deathplaceText.setX(xDisplayText);
-		deathplaceText.setY(y+ydiff*6);
-		
-		//biography
-		Text bioText = new Text("");
-		bioText.setX(xLabels);
-		bioText.setY(y+ydiff*7.7);
-		
-		/**
-		 * creating the button to alter the selected person
-		 */
-		Button alterPersonButton = new Button("Alter this person's information");
-		alterPersonButton.setLayoutX(xLabels);
-		alterPersonButton.setLayoutY(y + ydiff*8.5);
-		alterPersonButton.setMinWidth(190);
-//		alterPersonButton.setAlignment(Pos.BASELINE_LEFT);
-		EventHandler<MouseEvent> alterPersonEvent = new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Text addSiteText = new Text(100, 200, "add node screen");
-				Group addGroup = new Group(addSiteText);
-				Scene addscreen = new Scene(addGroup, 1100, 850);
-				primaryStage.setScene(addscreen);
-				
-			}
-		};
-		alterPersonButton.addEventFilter(MouseEvent.MOUSE_CLICKED, alterPersonEvent);
-		
-		/**
-		 * creating the button to delete the selected person
-		 */
-		Button deletePersonButton = new Button("Delete this person");
-		deletePersonButton.setLayoutX(xLabels);
-		deletePersonButton.setLayoutY(y + ydiff*13.5);
-		deletePersonButton.setMinWidth(190);
-		EventHandler<MouseEvent> deletePersonEvent = new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				//TO DO
-				
-			}
-		};
-		deletePersonButton.addEventFilter(MouseEvent.MOUSE_CLICKED, deletePersonEvent);
-		
-		/**
-		 * creating the buttons to add new nodes
-		 */
-		
-		//add a parent node
-		Button addParentButton = new Button("Add Parent");
-		addParentButton.setLayoutX(xLabels);
-		addParentButton.setLayoutY(y + ydiff*9.5);
-		addParentButton.setMinWidth(190);
-		EventHandler<MouseEvent> addParentEvent = new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Text addSiteText = new Text(100, 200, "add node screen");
-				Group addGroup = new Group(addSiteText);
-				Scene addscreen = new Scene(addGroup, 1100, 850);
-				primaryStage.setScene(addscreen);
-				
-			}
-		};
-		addParentButton.addEventFilter(MouseEvent.MOUSE_CLICKED, addParentEvent);
-		
-		//add a child node
-		Button addChildButton = new Button("Add Child");
-		addChildButton.setLayoutX(xLabels);
-		addChildButton.setLayoutY(y + ydiff*10.5);
-		addChildButton.setMinWidth(190);
-		EventHandler<MouseEvent> addChildEvent = new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Text addSiteText = new Text(100, 200, "add node screen");
-				Group addGroup = new Group(addSiteText);
-				Scene addscreen = new Scene(addGroup, 1100, 850);
-				primaryStage.setScene(addscreen);
-				
-			}
-		};
-		addChildButton.addEventFilter(MouseEvent.MOUSE_CLICKED, addChildEvent);
-		
-		//add a spouse
-		Button addSpouseButton = new Button("Add Spouse");
-		addSpouseButton.setLayoutX(xLabels);
-		addSpouseButton.setLayoutY(y + ydiff*11.5);
-		addSpouseButton.setMinWidth(190);
-		EventHandler<MouseEvent> addSpouseEvent = new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Text addSiteText = new Text(100, 200, "add node screen");
-				Group addGroup = new Group(addSiteText);
-				Scene addscreen = new Scene(addGroup, 1100, 850);
-				primaryStage.setScene(addscreen);
-				
-			}
-		};
-		addSpouseButton.addEventFilter(MouseEvent.MOUSE_CLICKED, addSpouseEvent);
-		
-		//add a sibling
-		Button addSiblingButton = new Button("Add Sibling");
-		addSiblingButton.setLayoutX(xLabels);
-		addSiblingButton.setLayoutY(y + ydiff*12.5);
-		addSiblingButton.setMinWidth(190);
-		EventHandler<MouseEvent> addSiblingEvent = new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				Text addSiteText = new Text(100, 200, "add node screen");
-				Group addGroup = new Group(addSiteText);
-				Scene addscreen = new Scene(addGroup, 1100, 850);
-				primaryStage.setScene(addscreen);
-				
-			}
-		};
-		addSiblingButton.addEventFilter(MouseEvent.MOUSE_CLICKED, addSiblingEvent);
+		bio.setX(x);
+		bio.setY(310);
+		Label bioText = new Label("");
+		bioText.setMaxSize(200, 600);
+		bioText.setLayoutX(x);
+		bioText.setLayoutY(320);
 		
 		/**
 		 * adding all of the above elements into the Group
 		 */
-		Group root = new Group(back, help, textbox, firstname, lastname, gender, birthdate, birthplace, deathdate, deathplace, bio, firstnameText, lastnameText, genderText, birthdateText, birthplaceText, deathdateText,
-				deathplaceText, bioText, addParentButton, addChildButton, addSpouseButton, addSiblingButton, deletePersonButton, alterPersonButton);
+		Group root = new Group(back, help, textbox, grid, bio, bioText);
 
 		
 		/**
@@ -311,53 +172,113 @@ public class TreeScreen extends Application{
 		Logic Käthi = new Logic("Käthi", "Moser", false, "21-03-1936", "Hindelbank", 1);
 		Logic Hasi = new Logic("Hasi", "Schwarzenbach", true, "31-07-1953", "Wädenswil", 1);
 		Logic Heidi = new Logic("Heidi", "Stähli", false, "31-07-1955", "Wädenswil", 1);
+		Logic Susi = new Logic("Susi", "Schwarzenbach", false, "12-10-1962", "Wädenswil", 1);
 		Logic Silja = new Logic("Silja", "Stähli", false, "23-05-1986", "Wädenswil", 1);
 		Logic Patrick = new Logic("Patrick", "Wiesli", true, "24.04.1989", "St.Gallen", 1);
+		Logic Benjamin = new Logic("Benjamin", "Noclue", true, "no clue", "no clue", 1);
+		Logic Ronja = new Logic("Ronja", "Noclue", false, "no clue", "no clue", 1);
+		Logic Jürg = new Logic("Jürg", "Moser", true, "", "", 1);
+		Logic Madlen = new Logic("Madlen", "Moser", false, "", "", 1, "2003", "Bern");
+		Logic Urs = new Logic("Urs", "Moser", true, "", "", 1);
+		Logic Johanna = new Logic("Johanna","Moser", false, "", "", 1);
+		Logic Lara = new Logic("Lara", "Moser", false, "","", 1);
+		Logic Florian = new Logic("Florian", "Moser", true, "", "", 1);
+		Logic Nina = new Logic("Nina", "Moser", false, "", "", 1);
+		Logic Michel = new Logic("Michel", "Moser", true, "", "", 1);
+		Logic Aline = new Logic("Aline", "Stähli", false, "", "", 1);
+		Logic Jonas = new Logic("Jonas", "Stähli", true, "", "", 1);
+		Logic Julian = new Logic("Julian", "Noclue", true, "06-03-2019", "", 1);
 		
-		Lilly.addParent(Felix);
-		Felix.addSpouse(Susanna);
-//		Susanna.addChild(Fanny);
-		Felix.addParent(Fritz);
-		Fritz.addChild(Hasi);
-		Felix.addParent(Hedi);
+//		Lilly.addParent(Felix);
+//		Felix.addSpouse(Susanna);
+////		Susanna.addChild(Fanny);
+//		Felix.addParent(Fritz);
+//		Fritz.addChild(Hasi);
+//		Felix.addParent(Hedi);
 //		Susanna.addParent(Hans);
 //		Susanna.addParent(Käthi);
-//		Fritz.addChild(Heidi);
-		Fritz.addParent(Hans);
-		Lilly.setBiography("Learning Java");
-		Lilly.addSibling(Fanny);
-		Lilly.addSibling(Käthi);
-		Felix.addSibling(Heidi);
+//		Fritz.addChild(Susi);
+////		Fritz.addParent(Hans);
+		Lilly.setBiography("Learning Java and Learning Java and Learning Java and Learning Java and Learning Java and Learning Java and Learning Java and Learning Java and Learning Java ");
+//		Lilly.addSibling(Fanny);
+////		Lilly.addSibling(Käthi);
+//		Felix.addSibling(Heidi);
 		Heidi.addChild(Silja);
-		Fanny.addChild(Patrick);
+//		Fanny.addChild(Patrick);
+		Fanny.addSpouse(Patrick);
+		Silja.addSpouse(Benjamin);
+		Silja.addChild(Ronja);
+//		Hans.addChild(Susi);
+//		Susanna.addSibling(Jürg);
+//		Käthi.addChild(Madlen);
+//		Hans.addChild(Urs);
+//		Urs.addChild(Johanna);
+//		Urs.addChild(Lara);
+//		Lara.addSibling(Florian);
+//		Jürg.addChild(Nina);
+//		Jürg.addChild(Michel);
+//		Fritz.addParent(Käthi);
+		Heidi.addChild(Jonas);
+		Heidi.addChild(Aline);
+		Silja.addChild(Julian);
+		
+		Silja.addChild(Madlen);
+		Madlen.addSpouse(Felix);
+		Julian.addSpouse(Susi);
+		Silja.addChild(Lilly);
+		Silja.addChild(Fanny);
+		Silja.addChild(Lara);
+		Heidi.addChild(Florian);
+		Heidi.addChild(Nina);
+		Aline.addSpouse(Michel);
+		Fanny.addSpouse(Patrick);
+//		Lara.addSpouse(Urs);
+		Florian.addSpouse(Johanna);
+		Jonas.addSpouse(Käthi);
+		Lilly.addSpouse(Hasi);
+		Nina.addSpouse(Hans);
+		Heidi.addSpouse(Urs);
 		ArrayList<Logic> trees = new ArrayList<>();
 		
 		trees.add(Lilly);
 		trees.add(Felix);
-		trees.add(Susanna);
+//		trees.add(Susanna);
 		trees.add(Fanny);  
-		trees.add(Fritz);
+//		trees.add(Fritz);
 //		System.out.println(Fritz.getChildren());
 //		System.out.println("Hans : " + Hans.getChildren());
 //		System.out.println(Felix.getChildren());
 
-		trees.add(Hedi);
+//		trees.add(Hedi);
 		trees.add(Hans);
 		trees.add(Käthi);
 		trees.add(Hasi);
 		trees.add(Heidi);
+		trees.add(Susi);
 		trees.add(Silja);
+		trees.add(Benjamin);
+		trees.add(Ronja);
 		trees.add(Patrick);
-//		
+		trees.add(Jürg);
+		trees.add(Urs);
+		trees.add(Madlen);
+		trees.add(Johanna);
+		trees.add(Michel);
+		trees.add(Nina);
+		trees.add(Florian);
+		trees.add(Lara);
+		trees.add(Aline);
+		trees.add(Jonas);
+		trees.add(Julian);
+			
 		/**
 		 * for every node, a Button is created
 		 */
 		ToggleGroup tg = new ToggleGroup();
-
 		int y2 = 800;
-		int y1 = 250;
-		int x2 = 1000;
-		int x1 = 200;
+		int y1 = 350;
+		int x2 = 950;
+		int x1 = 250;
 		int maxLevel = trees.get(0).getTreeLevel();
 		int minLevel = trees.get(0).getTreeLevel();
 		for(Logic t1 : trees) {
@@ -368,235 +289,395 @@ public class TreeScreen extends Application{
 				maxLevel = t1.getTreeLevel();
 			}
 		}
-		
-		
 		double numberOfLevels = maxLevel-minLevel + 1;
-//		System.out.println("number of levels: " +numberOfLevels);
 
-		
-		double maxNodesInOneLevel = 0;
-		Comparator<Logic> LevelComp = new Comparator<Logic>() {
-			public int compare(Logic t1, Logic t2) {
-				return t1.getTreeLevel()-t2.getTreeLevel();
-			}
-		};
 		Comparator<Logic> PosComp = new Comparator<Logic>() {
 			public int compare(Logic t1, Logic t2) {
 				return (int) t1.getXPos()- (int)t2.getXPos();
 			}
 		};
-//		ArrayList<Logic> temp = trees;
-//		Collections.sort(temp, LevelComp);
-		int max = 0;
+		
+		Logic focused = Urs;
 		double levelWithMaxNodes = 0;
-		int level = minLevel;
-		for(int i = 1; i<numberOfLevels; i++) {
-			int no = 0;
-			for(int j = 0; j<trees.size(); j++) {
-				if(trees.get(j).getTreeLevel()==level) {
-					no++;
-				}
-			}
-			if(no>max) {
-				max = no;
-				levelWithMaxNodes = level;
-			}
-			level++;
+		levelWithMaxNodes = focused.getTreeLevel();
+		
+		ArrayList<Logic> sortedTrees = new ArrayList<>();	
+		
+		//adding the siblings. focused made first element
+		ArrayList<Logic> siblingTrees;
+		if(focused.getFather() != null) {
+			siblingTrees = focused.getFather().getChildren();
 		}
-		int nodeIndex = 0;
-//		System.out.println("max "+max);
+		else if(focused.getMother() != null){
+			siblingTrees = focused.getMother().getChildren();
+		}
+		else {
+			siblingTrees = new ArrayList<>();
+			siblingTrees.add(focused);
+		}
+		int temp = siblingTrees.indexOf(focused);
+		siblingTrees.set(temp, siblingTrees.get(0));
+		siblingTrees.set(0, focused);
+		sortedTrees.addAll(siblingTrees);
 
-			
-//		System.out.println("level with max: " + levelWithMaxNodes);
-		ArrayList<Logic> sortedLogics = new ArrayList<Logic>();
-		ArrayList<Logic> higherLogics = new ArrayList<Logic>();
-		ArrayList<Logic> copyLogics = new ArrayList<>();
-		copyLogics.addAll(trees);
-		for(Logic t : trees) {
-			if(t.getTreeLevel() == levelWithMaxNodes) {
-				sortedLogics.add(t);
-				copyLogics.remove(t);
-			}
-			if(t.getTreeLevel() < levelWithMaxNodes) {
-				higherLogics.add(t);
-				copyLogics.remove(t);
+		
+		//adding the spouses
+		ArrayList<Logic> spouses = new ArrayList<>();
+		for(Logic t : siblingTrees) {
+			if(t.getSpouse() != null) {
+				spouses.add(t.getSpouse());
 			}
 		}
+		sortedTrees.addAll(spouses);
 		
-//		System.out.println("Sorted trees:  "+ sortedLogics);
-		ArrayList<Logic> sortedWithoutSpouses = new ArrayList<>();
-		ArrayList<Logic> siblingLogics = new ArrayList<>();
+		//adding parents
+		if(focused.getFather() != null) {
+			sortedTrees.add(focused.getFather());
+		}
+		if(focused.getMother() != null) {
+			sortedTrees.add(focused.getMother());
+		}
 		
-		
-		for(Logic t1 : sortedLogics) {
-			if(t1.getSpouse() != null) {
-				if(!siblingLogics.contains(t1.getSpouse())) {
-					siblingLogics.add(t1);
+		//adding children and their spouses
+		if(focused.getChildren() != null) {
+			sortedTrees.addAll(focused.getChildren());
+			for(Logic c : focused.getChildren()) {
+				if(c.getSpouse() != null) {
+					sortedTrees.add(c.getSpouse());
 				}
-				else {
-					System.out.println(t1.getFirstName());
-					sortedWithoutSpouses.add(t1);
-				}
-			}
-			else {
-				siblingLogics.add(t1);
 			}
 		}
-//		System.out.println("Sibling trees:  "+ siblingLogics);
 
-		max = siblingLogics.size();
+		//scaling
+		double scale = Math.min(2.0,  8.0/siblingTrees.size());
+		if(focused.getChildren() != null) {
+			scale = Math.min(scale, 7.0/focused.getChildren().size());
+		}
+
+		//middle of the siblingtrees
+		int middle=(int) Math.ceil(siblingTrees.size()/2.0);
 		
-		Collections.sort(higherLogics, LevelComp.reversed());
-		Collections.sort(copyLogics, LevelComp);
-		sortedLogics.addAll(higherLogics);
-		sortedLogics.addAll(copyLogics);
-		ToggleButton[] tbA = new ToggleButton[trees.size()];
-		int i = 0;
-		for(Logic t : sortedLogics) {
+		//max
+		int max = siblingTrees.size();
+		
+		levelWithMaxNodes  = numberOfLevels - (maxLevel -levelWithMaxNodes);
+		
+		for(Logic t : sortedTrees) {
 			double treeLevel = numberOfLevels - (maxLevel -t.getTreeLevel());
-//			System.out.println(t.getFirstName() + " level: " + treeLevel);
+
+			//creating the ToggleButton
 			ToggleButton treebutton = new ToggleButton(t.getFirstName());
 			treebutton.setShape(new Circle(10));
-			treebutton.setStyle("-fx-background-color: #98FB98; -fx-border-width: 2px;-fx-border-color: #006400");
-			treebutton.setMinSize(50, 50);
-			treebutton.setMaxSize(50, 50);
-			treebutton.setLayoutY((((y2-y1)/2)*((1+2*treeLevel)/numberOfLevels)));
-			t.setYPos((((y2-y1)/2)*((1+2*treeLevel)/numberOfLevels)));
-//			System.out.println("(1+2*treeLevel)/numberOfLevels : "+(1+2*treeLevel)/numberOfLevels);
-//			System.out.println(t.getFirstName()+ " y: " + ((y2-y1)/2)*((1+2*treeLevel)/numberOfLevels));
-//			if(t.getChildren() != null && t.getMale()) {
-//				treebutton.setLayoutX(610-50);
-//			}
-//			else if(t.getChildren() != null) {
-//				treebutton.setLayoutX(610+50);
-//			}
-//			else {
-//				treebutton.setLayoutX(610);
-//			}
-////			treebutton.setLayoutY(425+(t.getLogicLevel()*50));
-//			if(t.getChildren() != null) {
-//			allocateChildPositions(t);
-//			}
-			if(t.getTreeLevel()==levelWithMaxNodes) {
-				if(siblingLogics.contains(t) || t.getSpouse() == null) {
-	//				System.out.println("Level with most nodes " + ", first name: " + t.getFirstName());
-					treebutton.setLayoutX(x1+((x2-x1)/2.0 *((1+2.0*nodeIndex)/max)));
-					t.setXPos(x1+((x2-x1)/2.0 *((1+2.0*nodeIndex)/max)));
-//					System.out.println("Level with most nodes, firstname : " + t.getFirstName() + ", position : " + t.pos);
-//					System.out.println((1+2*nodeIndex)/2.0);
-//					System.out.println("max "+ max);
-	//				System.out.println(Hasi.pos);
+			
+			if(t.getMale()) {
+				treebutton.setStyle("-fx-background-color: #87CEFA; -fx-border-width: 2px;-fx-border-color: #006400");
+			}
+			else {
+				treebutton.setStyle("-fx-background-color: #FFB6C1; -fx-border-width: 2px;-fx-border-color: #006400");
+			}
+			treebutton.setMinSize(scale*0.8*50, scale*0.8*50);
+			treebutton.setMaxSize(scale*0.8*50, scale*0.8*50);
+
+			// creating focused and siblings
+			if(treeLevel==levelWithMaxNodes) {
+				t.setYPos((150+((y2-y1)/2.0)));
+				if(t.equals(focused)) {
+					t.setXPos(x1+(x2-x1)/2.0);
+					if(t.getMale()) {
+						treebutton.setStyle("-fx-background-color: #87CEFA; -fx-border-width: 3px;-fx-border-color: #FF0000");
+					}
+					else {
+						treebutton.setStyle("-fx-background-color: #FFB6C1; -fx-border-width: 3px;-fx-border-color: #FF0000");
+					}
 				}
+				
+				//focused female
+				else if (!focused.getMale()){
+					if(siblingTrees.contains(t)) {
+						//first half of siblings
+						if(siblingTrees.indexOf(t)<middle) {
+							if(t.getSpouse() != null && t.getMale()) {
+								t.setXPos(focused.getXPos()-scale*100*(middle-siblingTrees.indexOf(t))-scale*40);
+							}
+							else {
+								t.setXPos(focused.getXPos()-scale*100*(middle-siblingTrees.indexOf(t)));
+							}
+						}
+						//second half of siblings
+						else {
+							if(t.getSpouse() != null && t.getMale()) {
+								t.setXPos(focused.getXPos()+scale*100*(siblingTrees.indexOf(t)-middle+1)-scale*40);
+							}
+							else {
+								t.setXPos(focused.getXPos()+scale*100*(siblingTrees.indexOf(t)-middle+1));
+							}
+						}
+					}
+					else if(t.getMale()){
+						t.setXPos(t.getSpouse().getXPos() - scale*0.7*60);
+					}
+					else {
+						t.setXPos(t.getSpouse().getXPos() + scale*0.7*60);
+					}
+				}
+				//focused male
 				else {
-					treebutton.setLayoutX(t.getSpouse().getXPos() + 60);
+					if(siblingTrees.contains(t)) {
+						if(siblingTrees.indexOf(t)<middle) {
+							if(t.getSpouse() != null && t.getMale()==false) {
+								t.setXPos(focused.getXPos()-scale*100*(middle-siblingTrees.indexOf(t))+scale*40);
+							}
+							else {
+								t.setXPos(focused.getXPos()-scale*100*(middle-siblingTrees.indexOf(t)));
+							}
+						}
+						else {
+							if(t.getSpouse() != null && t.getMale()==false) {
+								t.setXPos(focused.getXPos()+scale*100*(siblingTrees.indexOf(t)-middle+1)+scale*40);
+							}
+							else {
+								t.setXPos(focused.getXPos()+scale*100*(siblingTrees.indexOf(t)-middle+1));
+							}
+						}
+					}
+					else if(t.getMale()){
+						t.setXPos(t.getSpouse().getXPos() - scale*0.7*60);
+					}
+					else {
+						t.setXPos(t.getSpouse().getXPos() + scale*0.7*60);
+					}
 				}
 			}
-			else if(t.getTreeLevel() < levelWithMaxNodes) {
-				
-//				System.out.println(Hasi.pos);
+			
+			//parents
+			else if(treeLevel < levelWithMaxNodes) {
+				t.setYPos((150+((y2-y1)/2.0)-(y2-y1)*scale/4.0));
 				double numberOfChildren=0;
 				if(t.getChildren() != null) {
 					numberOfChildren = t.getChildren().size();
-//					System.out.println(t.getFirstName() +" no children: " + numberOfChildren);
 				}
-				if(numberOfChildren == 0) {
-					treebutton.setLayoutX(300);
-				}
-				
-				else {
-//					System.out.println(Hasi.pos);
-					if(t.getSpouse() != null && t.getMale() == false) {
-						treebutton.setLayoutX(((Collections.min(t.getChildren(), PosComp)).getXPos() +Collections.max(t.getChildren(), PosComp).getXPos())/2.0+60);
-						t.setXPos((((Collections.min(t.getChildren(), PosComp)).getXPos() +Collections.max(t.getChildren(), PosComp).getXPos())/2.0)+60);
-					}
-					else {
-//						treebutton.setLayoutX(((t.getChildren().get(t.getChildren().size()-1).pos +t.getChildren().get(0).pos)/2.0));
-						treebutton.setLayoutX(((Collections.min(t.getChildren(), PosComp)).getXPos() +Collections.max(t.getChildren(), PosComp).getXPos())/2.0);
-//						System.out.println(t.getFirstName() + "'s children: " + t.getChildren());
-//						System.out.println("t.getChildren().get(t.getChildren().size()-1).getFirstName() : " +t.getChildren().get(t.getChildren().size()-1).getFirstName());
-//						System.out.println("t.getChildren().get(0).pos) : "+(t.getChildren().get(0).pos));
-//						System.out.println("t.getChildren().get(t.getChildren().size()-1).pos + t.getChildren().get(0).pos)/2: " + (t.getChildren().get(t.getChildren().size()-1).pos + t.getChildren().get(0).pos)/2);
-//						System.out.println("first name : " + t.getFirstName() + ", last child name " +t.getChildren().get(t.getChildren().size()-1).getFirstName() + ", pos " + t.getChildren().get(t.getChildren().size()-1).pos + "; first child pos: " + t.getChildren().get(0).pos);
-//						t.pos = ((t.getChildren().get(t.getChildren().size()-1).pos + t.getChildren().get(0).pos)/2.0);
-						t.setXPos(((Collections.min(t.getChildren(), PosComp)).getXPos() +Collections.max(t.getChildren(), PosComp).getXPos())/2.0);
-//						System.out.println("pos : " + t.pos);
-					}
-					
-				}
-				
-				
-			}
-			else {
-				int numberOfSiblings;
-				if(t.getFather() != null) {
-					numberOfSiblings = t.getFather().getChildren().size()-1;
-					allocateChildPositions(t.getFather(), numberOfSiblings);
-				}
-				else {
-					numberOfSiblings = t.getMother().getChildren().size()-1;
-					allocateChildPositions(t.getMother(), numberOfSiblings);
-				}
-				if(numberOfSiblings > 0) {
-					if(t.getMother() == null) {
-						double minBorder = t.getFather().getXPos() - 64;
-						double maxBorder = t.getFather().getXPos() + 64;
-//						System.out.println("minBorder " + minBorder);
-//						System.out.println("maxBorder " + maxBorder);
-//						System.out.println("t.getFather().pos " + t.getFather().pos);
-	
-						treebutton.setLayoutX(t.getFather().getXPos()+ (maxBorder-minBorder)/2.0 * ((2.0*t.getNoNo())/numberOfSiblings));
-						t.setXPos(t.getFather().getXPos()+ (maxBorder-minBorder)/2.0 * ((2.0*t.getNoNo())/numberOfSiblings));
-//						System.out.println(t.getFirstName() + "pos: " + (t.getFather().pos+ (maxBorder-minBorder)/2.0 * ((1+2.0*t.noNo)/numberOfSiblings)));
-					}
-					else {
-						double minBorder = t.getFather().getXPos() - 64;
-						double maxBorder = t.getFather().getXPos() + 64;
-//						System.out.println("minBorder " + minBorder);
-//						System.out.println("maxBorder " + maxBorder);
-//						System.out.println("t.getFather().pos " + t.getFather().pos);
-
-						treebutton.setLayoutX(t.getFather().getXPos()+ 30 + (maxBorder-minBorder)/2.0 * ((2.0*t.getNoNo())/numberOfSiblings));
-						t.setXPos(t.getFather().getXPos()+ 30 + (maxBorder-minBorder)/2.0 * ((2.0*t.getNoNo())/numberOfSiblings));
-//						System.out.println(t.getFirstName() + "pos: " + (t.getFather().pos+ (maxBorder-minBorder)/2.0 * ((1+2.0*t.noNo)/numberOfSiblings)));
-					}
-				}
-				else {
-					if(t.getMother() == null) {
-//						System.out.println("t.getFather().pos " + t.getFather().pos);
-						treebutton.setLayoutX(t.getFather().getXPos());
-	//					System.out.println("node : " + t.getFirstName() + ", pos: " + t.pos);
-					}
-					else {
-//						System.out.println("t.getFather().pos " + t.getFather().pos);
-						if(t.getFather()==null) {
-							treebutton.setLayoutX(t.getMother().getXPos());
-							t.setXPos(t.getMother().getXPos());
-//							System.out.println("node : " + t.getFirstName() + ", pos: " + t.pos);
+				if(numberOfChildren == 1) {
+					if(t.getChildren().get(0).getSpouse() == null || (t.getChildren().get(0).getSpouse().getFather() == null && t.getChildren().get(0).getSpouse().getFather() == null)) {
+						if(t.getSpouse() != null && t.getMale() == false) {
+							t.setXPos(t.getChildren().get(0).getXPos() + scale*41);
 						}
 						else {
-							treebutton.setLayoutX(t.getFather().getXPos()+30);
-							t.setXPos(t.getFather().getXPos());
+							t.setXPos(t.getChildren().get(0).getXPos());
 						}
-						
-//						System.out.println("node : " + t.getFirstName() + ", pos: " + t.pos);
+					}
+					else {
+						if(t.getSpouse() != null && t.getMale() == false) {
+							t.setXPos(t.getChildren().get(0).getXPos() + scale*242);
+						}
+						else {
+							t.setXPos(t.getChildren().get(0).getXPos() + scale*200);
+						}
+					}
+				}
+				else {
+					double offset = 0;
+					double potentialOffset = scale*100;
+					for(Logic child : t.getChildren()) {
+						if(child.getMale() == false && child.getSpouse() != null && (child.getSpouse().getFather() != null || child.getSpouse().getFather() != null)){
+							offset = potentialOffset;
+							if(child.getSpouse().getFather() != null) {
+								offset += Collections.max(child.getSpouse().getFather().getChildren(), PosComp).getXPos();
+							}
+							else {
+								offset += Collections.max(child.getSpouse().getMother().getChildren(), PosComp).getXPos();
+							}
+						}
+					}
+					
+					if(offset == 0) {
+						if(t.getSpouse() != null && t.getMale() == false) {
+							t.setXPos(((Collections.min(t.getChildren(), PosComp)).getXPos() +Collections.max(t.getChildren(), PosComp).getXPos())/2.0+scale*42);
+						}
+						else {
+							t.setXPos(((Collections.min(t.getChildren(), PosComp)).getXPos() +Collections.max(t.getChildren(), PosComp).getXPos())/2.0);
+						}
+					}
+					else {
+						if(t.getMale()) {
+							t.setXPos(offset);
+						}
+						else {
+							t.setXPos(offset+scale*42);
+						}
+					}
+				}
+			}
+			
+			//children
+			else {
+				t.setYPos((150+((y2-y1)/2.0)+(y2-y1)*scale/4.0));
+
+				ArrayList<Logic> kids = focused.getChildren();
+				double midpoint = focused.getXPos();
+
+				if(!kids.contains(t) && t.getSpouse() != null) {
+					t.setXPos(t.getSpouse().getXPos() + scale*40);
+				}
+				double mid = kids.size() /2.0;
+
+				if(focused.getMale() == false) {
+					if(kids.size() % 2 != 0) {
+						if(kids.contains(t)) {
+							//first half of siblings
+							if(kids.indexOf(t) == Math.floor(mid)) {
+								if(t.getMale() && t.getSpouse() != null) {
+									t.setXPos(focused.getXPos()-scale*30);
+								}
+								else {
+									t.setXPos(focused.getXPos());
+
+								}
+							}
+							else if(kids.indexOf(t)<mid) {
+								if(t.getSpouse() != null && t.getMale()) {
+									t.setXPos(focused.getXPos()-scale*99*(mid-kids.indexOf(t))-scale*10);
+								}
+								else {
+									t.setXPos(focused.getXPos()-scale*99*(mid-kids.indexOf(t))+scale*30);
+								}
+							}
+							//second half of siblings
+							else {
+								if(t.getSpouse() != null && t.getMale()) {
+									t.setXPos(focused.getXPos()+scale*100*(kids.indexOf(t)-mid+1)-scale*40);
+								}
+								else {
+									t.setXPos(focused.getXPos()+scale*100*(kids.indexOf(t)-mid+1));
+								}
+							}
+						}
+						else if(t.getMale()){
+							t.setXPos(t.getSpouse().getXPos() - scale*40);
+						}
+						else {
+							t.setXPos(t.getSpouse().getXPos() + scale*40);
+						}
+					}
+					else {
+						if(kids.contains(t)) {
+							//first half of siblings						
+							if(kids.indexOf(t)<mid) {
+								if(t.getSpouse() != null && t.getMale()) {
+									t.setXPos(focused.getXPos()-scale*99*(mid-kids.indexOf(t))-scale*10);
+								}
+								else {
+									t.setXPos(focused.getXPos()-scale*99*(mid-kids.indexOf(t))+scale*30);
+								}
+							}
+							//second half of siblings
+							else {
+								if(t.getSpouse() != null && t.getMale()) {
+									t.setXPos(focused.getXPos()+scale*100*(kids.indexOf(t)-mid+1)+scale*10);
+								}
+								else {
+									t.setXPos(focused.getXPos()+scale*100*(kids.indexOf(t)-mid+1)-scale*30);
+								}
+							}
+						}
+						else if(t.getMale()){
+							t.setXPos(t.getSpouse().getXPos() - scale*40);
+						}
+						else {
+							t.setXPos(t.getSpouse().getXPos() + scale*40);
+						}
 					}
 
 				}
+				else {
+					if(kids.size() % 2 != 0) {
+						if(kids.contains(t)) {
+							//first half of siblings
+							if(kids.indexOf(t) == Math.floor(mid)) {
+								if(t.getMale() == false && t.getSpouse() != null) {
+									t.setXPos(focused.getXPos() + scale*30);
+								}
+								else {
+									t.setXPos(focused.getXPos());
+								}
+							}
+							else if(kids.indexOf(t)<mid) {
+								if(t.getSpouse() != null && t.getMale() == false) {
+									t.setXPos(focused.getXPos()-scale*99*(mid-kids.indexOf(t))+scale*30);
+								}
+								else {
+									t.setXPos(focused.getXPos()-scale*99*(mid-kids.indexOf(t))-scale*10);
+								}
+							}
+							//second half of siblings
+							else {
+								if(t.getSpouse() != null && t.getMale() == false) {
+									t.setXPos(focused.getXPos()+scale*100*(kids.indexOf(t)-mid+1)+scale*40);
+								}
+								else {
+									t.setXPos(focused.getXPos()+scale*100*(kids.indexOf(t)-mid+1));
+								}
+							}
+						}
+						else if(t.getMale()){
+							t.setXPos(t.getSpouse().getXPos() - scale*40);
+
+						}
+						else {
+							t.setXPos(t.getSpouse().getXPos() + scale*40);
+						}
+					}
+					else {
+						if(kids.contains(t)) {
+							//first half of siblings						
+							if(kids.indexOf(t)<mid) {
+								if(t.getSpouse() != null && t.getMale()) {
+									t.setXPos(focused.getXPos()-scale*99*(mid-kids.indexOf(t))-scale*10);
+								}
+								else {
+									t.setXPos(focused.getXPos()-scale*99*(mid-kids.indexOf(t))+scale*30);
+								}
+							}
+							//second half of siblings
+							else {
+								if(t.getSpouse() != null && t.getMale()) {
+									t.setXPos(focused.getXPos()+scale*100*(kids.indexOf(t)-mid+1)+scale*10);
+								}
+								else {
+									t.setXPos(focused.getXPos()+scale*100*(kids.indexOf(t)-mid+1)-scale*30);
+								}
+							}
+						}
+						else if(t.getMale()){
+							t.setXPos(t.getSpouse().getXPos() - scale*40);
+						}
+						else {
+							t.setXPos(t.getSpouse().getXPos() + scale*40);
+						}
+					}
+				}				
 			}
-//			System.out.println(t.getFirstName() + " x: " + t.getLogicLevel());
 
 			EventHandler<MouseEvent> nodeEvent = new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent event) {
-//					ToggleButton selected = (ToggleButton) tg.getSelectedToggle();
 					ObservableList<Toggle> tgs = tg.getToggles();
 					for(Toggle t : tgs) {
 						ToggleButton current = (ToggleButton) t;
 						if(current.isSelected()) {
-							current.setStyle("-fx-background-color: #EEE8AA; -fx-border-width: 2px;-fx-border-color: #006400");
+							if(current.getStyle() == "-fx-background-color: #87CEFA; -fx-border-width: 2px;-fx-border-color: #006400") {
+								current.setStyle("-fx-background-color: #87CEFA; -fx-border-width: 3px;-fx-border-color: #EEE8AA");
+							}
+							else if(current.getStyle() == "-fx-background-color: #FFB6C1; -fx-border-width: 2px;-fx-border-color: #006400"){
+								current.setStyle("-fx-background-color: #FFB6C1; -fx-border-width: 3px;-fx-border-color: #EEE8AA");
+							}
 						}
 						else {
-							current.setStyle("-fx-background-color: #98FB98; -fx-border-width: 2px;-fx-border-color: #006400");
+							if(current.getStyle() == "-fx-background-color: #87CEFA; -fx-border-width: 3px;-fx-border-color: #EEE8AA") {
+								current.setStyle("-fx-background-color: #87CEFA; -fx-border-width: 2px;-fx-border-color: #006400");
+							}
+							else if(current.getStyle() == "-fx-background-color: #FFB6C1; -fx-border-width: 3px;-fx-border-color: #EEE8AA"){
+								current.setStyle("-fx-background-color: #FFB6C1; -fx-border-width: 2px;-fx-border-color: #006400");
+							}
 						}
 					}
 					firstnameText.setText(t.getFirstName());
@@ -605,7 +686,23 @@ public class TreeScreen extends Application{
 					birthplaceText.setText(t.getBirthPlace());
 					deathdateText.setText(t.getDeathDate());
 					deathplaceText.setText(t.getDeathPlace());
-					bioText.setText(t.getBiography());
+					
+					String biotxt = "";
+					if(t.getBiography() != null) {
+						String line = "";
+						String[] bioWords = t.getBiography().split(" ");
+						for(String word : bioWords) {
+							if(line.length() + word.length() <= 33) {
+								line += word + " ";
+							}
+							else {
+								biotxt += line + "\n";
+								line = word+ " ";
+							}
+						}
+					}
+					bioText.setText(biotxt);
+					
 					if(t.getMale()) {
 						genderText.setText("male");
 					}
@@ -613,90 +710,77 @@ public class TreeScreen extends Application{
 						genderText.setText("female");
 					}
 					treebutton.setSelected(true);
-//					treebutton.setStyle("-fx-background-color: #EEE8AA");
-
 				}
 			};
+			
 			treebutton.setToggleGroup(tg);
-			treebutton.addEventFilter(MouseEvent.MOUSE_CLICKED, nodeEvent);
-//			treebutton.setOnAction(evt -> {if(treebutton.isSelected()) {treebutton.setStyle("-fx-background-color: #EEE8AA");} else{treebutton.setStyle("-fx-background-color: #006400");}});
+			treebutton.addEventFilter(MouseEvent.MOUSE_MOVED, nodeEvent);
+			treebutton.setLayoutY(t.getYPos());
+			treebutton.setLayoutX(t.getXPos());
 
-			t.setXPos(treebutton.getLayoutX());
-			System.out.println("firstname: " + t.getFirstName() + ", x pos: " + treebutton.getLayoutX());
 			root.getChildren().add(treebutton);
-			tbA[i] = treebutton;
-			if(t.getTreeLevel() == levelWithMaxNodes && siblingLogics.contains(t)) {
-			nodeIndex++;
-			}
-			i++;
 		}
 
+		//creating the lines linking parents and children & the rings between spouses
 		for(Logic t : trees) {
+			//lines to mothers
 			if(t.getMother() != null) {
-//				System.out.println("mother: " +t.getMother().getFirstName());
-//				System.out.println(t.getMother().pos);
-				Line m = new Line(t.getXPos()+25, t.getYPos(), t.getMother().getXPos()+25, t.getMother().getYPos()+50);
-				m.setStyle("-fx-stroke: #FFB6C1");
-//				System.out.println("firstname: "+ t.getFirstName());
+				Line m = new Line(t.getXPos()+scale*0.9*25, t.getYPos(), t.getMother().getXPos()+scale*0.8*25, t.getMother().getYPos()+scale*0.8*50);
+				m.setStyle("-fx-stroke: #FFFFFF");
 				root.getChildren().add(m);
 			}
+			//lines to fathers
 			if(t.getFather() != null) {
-//				System.out.println("mother: " +t.getMother().getFirstName());
-//				System.out.println(t.getMother().pos);
-				Line m = new Line(t.getXPos()+25, t.getYPos(), t.getFather().getXPos()+25, t.getFather().getYPos()+50);
-				m.setStyle("-fx-stroke: #00FFFF");
-//				System.out.println("firstname: "+ t.getFirstName());
+				Line m = new Line(t.getXPos()+scale*0.9*25, t.getYPos(), t.getFather().getXPos()+scale*0.8*25, t.getFather().getYPos()+scale*0.8*50);
+				m.setStyle("-fx-stroke: #000000");
 				root.getChildren().add(m);
 			}
+			//rings between spouses
 			if(t.getSpouse() != null && t.getMale()) {
-				Circle ring1 = new Circle(2.5, Color.MEDIUMSEAGREEN);
+				Circle ring1 = new Circle(2.5*scale, Color.MEDIUMSEAGREEN);
 				ring1.setStroke(Color.GOLD);
-				ring1.setCenterX(t.getXPos() +54);
-				ring1.setCenterY(t.getYPos() + 25);
+				ring1.setCenterX(t.getXPos() +scale*0.75*54);
+				ring1.setCenterY(t.getYPos() + scale*25);
 				root.getChildren().add(ring1);
-				Circle ring2 = new Circle(2.5, Color.MEDIUMSEAGREEN);
+				Circle ring2 = new Circle(2.5*scale, Color.MEDIUMSEAGREEN);
 				ring2.setStroke(Color.GOLD);
-				ring2.setCenterX(t.getXPos() +57);
-				ring2.setCenterY(t.getYPos() + 25);
+				ring2.setCenterX(t.getXPos() +scale*0.75*57);
+				ring2.setCenterY(t.getYPos() + scale*25);
 				root.getChildren().add(ring2);
 				Shape s = Shape.intersect(ring1, ring2);
 				s.setFill(Color.TRANSPARENT);
 				s.setStroke(Color.WHITESMOKE);
 				root.getChildren().add(s);
 			}
-			
-			
-			
 		}
-//		root.getChildren().
 		Scene scene = new Scene(root, 1100, 850);
 		scene.setFill(Color.MEDIUMSEAGREEN);
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("FamilyLogic");
+		primaryStage.setTitle("FamilyTree");
 		primaryStage.show();
 	}
 	
-
 	public void allocateChildPositions(Logic parent, int numberOfSiblings) {
-		double middle = numberOfSiblings/2.0;
-//		System.out.println("middle " + middle);
-//		if(numberOfSiblings % 2 != 0) {
-//			parent.getChildren().get((int)middle).noNo = -1;
-//		}
-		int counter = 1;
-		for(int i = 0; i<parent.getChildren().size(); i++) {
-			if(numberOfSiblings-i > middle) {
-				parent.getChildren().get(i).setNoNo(-counter);
-//				System.out.println(parent.getChildren().get(i).getFirstName() + " noNO: " + parent.getChildren().get(i).noNo);
-				counter--;
-			}
-			else {
-				parent.getChildren().get(i).setNoNo(counter);
-				counter++;
-//				System.out.println(parent.getChildren().get(i).getFirstName() + " noNO: " + parent.getChildren().get(i).noNo);
+		if(numberOfSiblings == 1) {
+			parent.getChildren().get(0).setNoNo(-1);
+			parent.getChildren().get(1).setNoNo(1);
 
+		}
+		else {
+			double middle = numberOfSiblings/2.0;
+			int counter = 1;
+			for(int i = 0; i<parent.getChildren().size(); i++) {
+				if(numberOfSiblings-i > middle) {
+					parent.getChildren().get(i).setNoNo(-counter);
+					counter--;
+				}
+				else {
+					parent.getChildren().get(i).setNoNo(counter);
+					counter++;
+				}
 			}
 		}
+		
 	}
 	
 	

@@ -42,6 +42,7 @@ public class Tree {
 		this.birthdate = birthdate;
 		this.birthplace = birthplace;
 		this.familyID = familyID;
+		treeLevel = 0;
 	}
 	
 	public Tree(String firstname, String lastname, boolean male, String birthdate, String birthplace, int familyID) {
