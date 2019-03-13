@@ -13,6 +13,7 @@ import Logic.Tree;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -54,6 +55,8 @@ public class TreeScreenModel {
 				}
 				trees.add(t);
 			}
+			System.out.println(trees.size());
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -577,12 +580,16 @@ public class TreeScreenModel {
 		
 	}
 	
-	public static Group generateNodes(Group root, ArrayList<Tree> trees, Stage stage, Tree focused) {
+	public static Group generateNodes(Group root, ArrayList<Tree> trees2, Stage stage, Tree focused) {
 		/**
 		 * for every node, a Button is created
 		 */
-//		ArrayList<Tree> trees = TreeScreenModel.getNodes();
-
+		ArrayList<Tree> trees = TreeScreenModel.getNodes();
+		System.out.println("trees size "+ trees.size());
+		Group ro = new Group();
+		for(Tree t1 : trees) {
+			System.out.println("tree : " + t1.getFirstName());
+		}
 		ToggleGroup tg = new ToggleGroup();
 		double scale = 1.0;
 		int y2 = 800;
@@ -665,14 +672,17 @@ public class TreeScreenModel {
 			System.out.println(t.getFirstName() + ", x: "+ t.getXPos()+ ", y: "+t.getYPos());
 //			t.setXPos(treebutton.getLayoutX());
 //			System.out.println("firstname: " + t.getFirstName() + ", x pos: " + treebutton.getLayoutX());
-			root.getChildren().add(treebutton);
+//			root.getChildren().add(treebutton);
 			tbA[i] = treebutton;
+			System.out.println("Type: " + treebutton.getClass());
+
 			if(t.getTreeLevel() == levelWithMaxNodes && siblingTrees.contains(t)) {
 			nodeIndex++;
 			}
 			i++;
 		}
 
+		ro.getChildren().addAll(tbA);
 		for(Tree t : trees) {
 			if(t.getMother() != null) {
 //				System.out.println("mother: " +t.getMother().getFirstName());
@@ -710,7 +720,10 @@ public class TreeScreenModel {
 			
 			
 		}
-		return root;
+//		ro.getChildren().addAll(root.getChildren());
+//		Scene s = new Scene(ro, 1100, 850);
+//		stage.setScene(s);
+		return ro;
 	}
 	
 	public static void main(String[] args) {

@@ -310,8 +310,19 @@ public class TreeScreen extends Application{
 		Tree Käthi = new Tree("Käthi", "Moser", false, "21-03-1936", "Hindelbank", 1);
 		Tree Hasi = new Tree("Hasi", "Schwarzenbach", true, "31-07-1953", "Wädenswil", 1);
 		Tree Heidi = new Tree("Heidi", "Stähli", false, "31-07-1955", "Wädenswil", 1);
+		Tree Susi = new Tree("Susi", "Schwarzenbach", false, "12-10-1962", "Wädenswil", 1);
 		Tree Silja = new Tree("Silja", "Stähli", false, "23-05-1986", "Wädenswil", 1);
 		Tree Patrick = new Tree("Patrick", "Wiesli", true, "24.04.1989", "St.Gallen", 1);
+		Tree Benjamin = new Tree("Benjamin", "Noclue", true, "no clue", "no clue", 1);
+		Tree Ronja = new Tree("Ronja", "Noclue", false, "no clue", "no clue", 1);
+		Tree Jürg = new Tree("Jürg", "Moser", true, "", "", 1);
+		Tree Madlen = new Tree("Madlen", "Moser", false, "", "", 1, "2003", "Bern");
+		Tree Urs = new Tree("Urs", "Moser", true, "", "", 1);
+		Tree Johanna = new Tree("Johanna","Moser", false, "", "", 1);
+		Tree Lara = new Tree("Lara", "Moser", false, "","", 1);
+		Tree Florian = new Tree("Florian", "Moser", true, "", "", 1);
+		Tree Nina = new Tree("Nina", "Moser", false, "", "", 1);
+		Tree Michel = new Tree("Michel", "Moser", true, "", "", 1);
 		
 		Lilly.addParent(Felix);
 		Felix.addSpouse(Susanna);
@@ -319,16 +330,29 @@ public class TreeScreen extends Application{
 		Felix.addParent(Fritz);
 		Fritz.addChild(Hasi);
 		Felix.addParent(Hedi);
-//		Susanna.addParent(Hans);
-//		Susanna.addParent(Käthi);
-//		Fritz.addChild(Heidi);
-		Fritz.addParent(Hans);
+		Susanna.addParent(Hans);
+		Susanna.addParent(Käthi);
+		Fritz.addChild(Susi);
+//		Fritz.addParent(Hans);
 		Lilly.setBiography("Learning Java");
 		Lilly.addSibling(Fanny);
-		Lilly.addSibling(Käthi);
+//		Lilly.addSibling(Käthi);
 		Felix.addSibling(Heidi);
 		Heidi.addChild(Silja);
-		Fanny.addChild(Patrick);
+//		Fanny.addChild(Patrick);
+		Fanny.addSpouse(Patrick);
+		Silja.addSpouse(Benjamin);
+		Silja.addChild(Ronja);
+//		Hans.addChild(Susi);
+		Susanna.addSibling(Jürg);
+		Käthi.addChild(Madlen);
+		Hans.addChild(Urs);
+		Urs.addChild(Johanna);
+		Urs.addChild(Lara);
+		Lara.addSibling(Florian);
+		Jürg.addChild(Nina);
+		Jürg.addChild(Michel);
+//		Fritz.addParent(Käthi);
 		ArrayList<Tree> trees = new ArrayList<>();
 		
 		trees.add(Lilly);
@@ -345,8 +369,20 @@ public class TreeScreen extends Application{
 		trees.add(Käthi);
 		trees.add(Hasi);
 		trees.add(Heidi);
+		trees.add(Susi);
 		trees.add(Silja);
+		trees.add(Benjamin);
+		trees.add(Ronja);
 		trees.add(Patrick);
+		trees.add(Jürg);
+		trees.add(Urs);
+		trees.add(Madlen);
+		trees.add(Johanna);
+		trees.add(Michel);
+		trees.add(Nina);
+		trees.add(Florian);
+		trees.add(Lara);
+		
 //		
 		/**
 		 * for every node, a Button is created
@@ -368,7 +404,7 @@ public class TreeScreen extends Application{
 			}
 		}
 		
-		
+
 		double numberOfLevels = maxLevel-minLevel + 1;
 //		System.out.println("number of levels: " +numberOfLevels);
 
@@ -381,7 +417,7 @@ public class TreeScreen extends Application{
 		};
 		Comparator<Tree> PosComp = new Comparator<Tree>() {
 			public int compare(Tree t1, Tree t2) {
-				return (int) t1.pos- (int)t2.pos;
+				return (int) t1.getXPos()- (int)t2.getXPos();
 			}
 		};
 //		ArrayList<Tree> temp = trees;
@@ -433,7 +469,7 @@ public class TreeScreen extends Application{
 					siblingTrees.add(t1);
 				}
 				else {
-					System.out.println(t1.getFirstName());
+//					System.out.println(t1.getFirstName());
 					sortedWithoutSpouses.add(t1);
 				}
 			}
@@ -449,6 +485,14 @@ public class TreeScreen extends Application{
 		Collections.sort(copyTrees, LevelComp);
 		sortedTrees.addAll(higherTrees);
 		sortedTrees.addAll(copyTrees);
+		
+		System.out.println("------------------------------------------------------------------------\n");
+		for(Tree t : sortedTrees) {
+			System.out.println(t.getFirstName());
+		}
+		System.out.println("------------------------------------------------------------------------\n");
+
+		
 		ToggleButton[] tbA = new ToggleButton[trees.size()];
 		int i = 0;
 		for(Tree t : sortedTrees) {
@@ -456,11 +500,16 @@ public class TreeScreen extends Application{
 //			System.out.println(t.getFirstName() + " level: " + treeLevel);
 			ToggleButton treebutton = new ToggleButton(t.getFirstName());
 			treebutton.setShape(new Circle(10));
-			treebutton.setStyle("-fx-background-color: #98FB98; -fx-border-width: 2px;-fx-border-color: #006400");
+			if(t.getMale()) {
+				treebutton.setStyle("-fx-background-color: #87CEFA; -fx-border-width: 2px;-fx-border-color: #006400");
+			}
+			else {
+				treebutton.setStyle("-fx-background-color: #FFB6C1; -fx-border-width: 2px;-fx-border-color: #006400");
+			}
 			treebutton.setMinSize(50, 50);
 			treebutton.setMaxSize(50, 50);
 			treebutton.setLayoutY((((y2-y1)/2)*((1+2*treeLevel)/numberOfLevels)));
-			t.ypos = (((y2-y1)/2)*((1+2*treeLevel)/numberOfLevels));
+			t.setYPos(((y2-y1)/2)*((1+2*treeLevel)/numberOfLevels));
 //			System.out.println("(1+2*treeLevel)/numberOfLevels : "+(1+2*treeLevel)/numberOfLevels);
 //			System.out.println(t.getFirstName()+ " y: " + ((y2-y1)/2)*((1+2*treeLevel)/numberOfLevels));
 //			if(t.getChildren() != null && t.getMale()) {
@@ -480,14 +529,17 @@ public class TreeScreen extends Application{
 				if(siblingTrees.contains(t) || t.getSpouse() == null) {
 	//				System.out.println("Level with most nodes " + ", first name: " + t.getFirstName());
 					treebutton.setLayoutX(x1+((x2-x1)/2.0 *((1+2.0*nodeIndex)/max)));
-					t.pos =x1+((x2-x1)/2.0 *((1+2.0*nodeIndex)/max));
+//					t.pos =x1+((x2-x1)/2.0 *((1+2.0*nodeIndex)/max));
 //					System.out.println("Level with most nodes, firstname : " + t.getFirstName() + ", position : " + t.pos);
 //					System.out.println((1+2*nodeIndex)/2.0);
 //					System.out.println("max "+ max);
 	//				System.out.println(Hasi.pos);
 				}
+				else if(t.getMale()){
+					treebutton.setLayoutX(t.getSpouse().getXPos() - 60);
+				}
 				else {
-					treebutton.setLayoutX(t.getSpouse().pos + 60);
+					treebutton.setLayoutX(t.getSpouse().getXPos() + 60);
 				}
 			}
 			else if(t.getTreeLevel() < levelWithMaxNodes) {
@@ -502,23 +554,69 @@ public class TreeScreen extends Application{
 					treebutton.setLayoutX(300);
 				}
 				
-				else {
-//					System.out.println(Hasi.pos);
-					if(t.getSpouse() != null && t.getMale() == false) {
-						treebutton.setLayoutX(((Collections.min(t.getChildren(), PosComp)).pos +Collections.max(t.getChildren(), PosComp).pos)/2.0+60);
-						t.pos = (((Collections.min(t.getChildren(), PosComp)).pos +Collections.max(t.getChildren(), PosComp).pos)/2.0)+60;
+				else if(numberOfChildren == 1) {
+					if(t.getChildren().get(0).getSpouse() == null || (t.getChildren().get(0).getSpouse().getFather() == null && t.getChildren().get(0).getSpouse().getFather() == null)) {
+						if(t.getSpouse() != null && t.getMale() == false) {
+							treebutton.setLayoutX(t.getChildren().get(0).getXPos() + 60);
+						}
+						else {
+							treebutton.setLayoutX(t.getChildren().get(0).getXPos());
+						}
 					}
 					else {
-//						treebutton.setLayoutX(((t.getChildren().get(t.getChildren().size()-1).pos +t.getChildren().get(0).pos)/2.0));
-						treebutton.setLayoutX(((Collections.min(t.getChildren(), PosComp)).pos +Collections.max(t.getChildren(), PosComp).pos)/2.0);
-//						System.out.println(t.getFirstName() + "'s children: " + t.getChildren());
-//						System.out.println("t.getChildren().get(t.getChildren().size()-1).getFirstName() : " +t.getChildren().get(t.getChildren().size()-1).getFirstName());
-//						System.out.println("t.getChildren().get(0).pos) : "+(t.getChildren().get(0).pos));
-//						System.out.println("t.getChildren().get(t.getChildren().size()-1).pos + t.getChildren().get(0).pos)/2: " + (t.getChildren().get(t.getChildren().size()-1).pos + t.getChildren().get(0).pos)/2);
-//						System.out.println("first name : " + t.getFirstName() + ", last child name " +t.getChildren().get(t.getChildren().size()-1).getFirstName() + ", pos " + t.getChildren().get(t.getChildren().size()-1).pos + "; first child pos: " + t.getChildren().get(0).pos);
-//						t.pos = ((t.getChildren().get(t.getChildren().size()-1).pos + t.getChildren().get(0).pos)/2.0);
-						t.pos = ((Collections.min(t.getChildren(), PosComp)).pos +Collections.max(t.getChildren(), PosComp).pos)/2.0;
-//						System.out.println("pos : " + t.pos);
+						System.out.println("here!!!!!!!!!!!!!!!!!!!!!!!");
+							if(t.getSpouse() != null && t.getMale() == false) {
+								treebutton.setLayoutX(t.getChildren().get(0).getXPos() + 260);
+							}
+							else {
+								treebutton.setLayoutX(t.getChildren().get(0).getXPos() + 200);
+							}
+					}
+				}
+				else {
+//					System.out.println(Hasi.pos);
+					int offset = 0;
+					int potentialOffset = 100;
+					for(Tree child : t.getChildren()) {
+						if(child.getMale() == false && child.getSpouse() != null && (child.getSpouse().getFather() != null || child.getSpouse().getFather() != null)){
+							offset = potentialOffset;
+							if(child.getSpouse().getFather() != null) {
+								offset += Collections.max(child.getSpouse().getFather().getChildren(), PosComp).getXPos();
+							}
+							else {
+								offset += Collections.max(child.getSpouse().getMother().getChildren(), PosComp).getXPos();
+							}
+						}
+						
+					}
+					
+					if(offset == 0) {
+						if(t.getSpouse() != null && t.getMale() == false) {
+							treebutton.setLayoutX(((Collections.min(t.getChildren(), PosComp)).getXPos() +Collections.max(t.getChildren(), PosComp).getXPos())/2.0+60);
+	//						t.pos = (((Collections.min(t.getChildren(), PosComp)).pos +Collections.max(t.getChildren(), PosComp).pos)/2.0)+60;
+						}
+						else {
+	//						treebutton.setLayoutX(((t.getChildren().get(t.getChildren().size()-1).pos +t.getChildren().get(0).pos)/2.0));
+							treebutton.setLayoutX(((Collections.min(t.getChildren(), PosComp)).getXPos() +Collections.max(t.getChildren(), PosComp).getXPos())/2.0+offset);
+	//						if(t.equals(Susi)) {
+	//						System.out.println(t.getFirstName() + "'s children: " + t.getChildren());
+	//						System.out.println("t.getChildren().get(t.getChildren().size()-1).getFirstName() : " +t.getChildren().get(t.getChildren().size()-1).getFirstName());
+	//						System.out.println("t.getChildren().get(0).pos) : "+(t.getChildren().get(0).pos));
+	//						System.out.println("t.getChildren().get(t.getChildren().size()-1).pos + t.getChildren().get(0).pos)/2: " + (t.getChildren().get(t.getChildren().size()-1).pos + t.getChildren().get(0).pos)/2);
+	//						System.out.println("first name : " + t.getFirstName() + ", last child name " +t.getChildren().get(t.getChildren().size()-1).getFirstName() + ", pos " + t.getChildren().get(t.getChildren().size()-1).pos + "; first child pos: " + t.getChildren().get(0).pos);
+	//						}
+	//						t.pos = ((t.getChildren().get(t.getChildren().size()-1).pos + t.getChildren().get(0).pos)/2.0);
+	//						t.pos = ((Collections.min(t.getChildren(), PosComp)).pos +Collections.max(t.getChildren(), PosComp).pos)/2.0;
+	//						System.out.println("pos : " + t.pos);
+						}
+					}
+					else {
+						if(t.getMale()) {
+							treebutton.setLayoutX(offset);
+						}
+						else {
+							treebutton.setLayoutX(offset+60);
+						}
 					}
 					
 				}
@@ -526,61 +624,77 @@ public class TreeScreen extends Application{
 				
 			}
 			else {
-				int numberOfSiblings;
-				if(t.getFather() != null) {
-					numberOfSiblings = t.getFather().getChildren().size()-1;
-					allocateChildPositions(t.getFather(), numberOfSiblings);
-				}
-				else {
-					numberOfSiblings = t.getMother().getChildren().size()-1;
-					allocateChildPositions(t.getMother(), numberOfSiblings);
-				}
-				if(numberOfSiblings > 0) {
-					if(t.getMother() == null) {
-						double minBorder = t.getFather().pos - 64;
-						double maxBorder = t.getFather().pos + 64;
-//						System.out.println("minBorder " + minBorder);
-//						System.out.println("maxBorder " + maxBorder);
-//						System.out.println("t.getFather().pos " + t.getFather().pos);
-	
-						treebutton.setLayoutX(t.getFather().pos+ (maxBorder-minBorder)/2.0 * ((2.0*t.noNo)/numberOfSiblings));
-						t.pos = t.getFather().pos+ (maxBorder-minBorder)/2.0 * ((2.0*t.noNo)/numberOfSiblings);
-//						System.out.println(t.getFirstName() + "pos: " + (t.getFather().pos+ (maxBorder-minBorder)/2.0 * ((1+2.0*t.noNo)/numberOfSiblings)));
+				if(t.getSpouse() != null && t.getSpouse().getXPos() != 0.0) {
+					if(t.getMale()) {
+//						System.out.println(t.getSpouse().pos);
+						treebutton.setLayoutX(t.getSpouse().getXPos() - 60);
+	//					t.pos = t.getSpouse().pos + 60;
+//						System.out.println("here");
 					}
 					else {
-						double minBorder = t.getFather().pos - 64;
-						double maxBorder = t.getFather().pos + 64;
-//						System.out.println("minBorder " + minBorder);
-//						System.out.println("maxBorder " + maxBorder);
-//						System.out.println("t.getFather().pos " + t.getFather().pos);
-
-						treebutton.setLayoutX(t.getFather().pos+ 30 + (maxBorder-minBorder)/2.0 * ((2.0*t.noNo)/numberOfSiblings));
-						t.pos = t.getFather().pos+ 30 + (maxBorder-minBorder)/2.0 * ((2.0*t.noNo)/numberOfSiblings);
-//						System.out.println(t.getFirstName() + "pos: " + (t.getFather().pos+ (maxBorder-minBorder)/2.0 * ((1+2.0*t.noNo)/numberOfSiblings)));
+//						System.out.println(t.getSpouse().pos);
+						treebutton.setLayoutX(t.getSpouse().getXPos() + 60);
+	//					t.pos = t.getSpouse().pos + 60;
+//						System.out.println("here");
 					}
 				}
 				else {
-					if(t.getMother() == null) {
-//						System.out.println("t.getFather().pos " + t.getFather().pos);
-						treebutton.setLayoutX(t.getFather().pos);
-						t.pos = t.getFather().pos;
-	//					System.out.println("node : " + t.getFirstName() + ", pos: " + t.pos);
+					int numberOfSiblings;
+					if(t.getFather() != null) {
+						numberOfSiblings = t.getFather().getChildren().size()-1;
+						allocateChildPositions(t.getFather(), numberOfSiblings);
 					}
 					else {
-//						System.out.println("t.getFather().pos " + t.getFather().pos);
-						if(t.getFather()==null) {
-							treebutton.setLayoutX(t.getMother().pos);
-							t.pos = t.getMother().pos;
-//							System.out.println("node : " + t.getFirstName() + ", pos: " + t.pos);
+						numberOfSiblings = t.getMother().getChildren().size()-1;
+						allocateChildPositions(t.getMother(), numberOfSiblings);
+					}
+					if(numberOfSiblings > 0) {
+						if(t.getMother() == null) {
+							double minBorder = t.getFather().getXPos() - 164;
+							double maxBorder = t.getFather().getXPos() + 164;
+	//						System.out.println("minBorder " + minBorder);
+	//						System.out.println("maxBorder " + maxBorder);
+	//						System.out.println("t.getFather().pos " + t.getFather().pos);
+		
+							treebutton.setLayoutX(t.getFather().getXPos()+(maxBorder-minBorder)/2.0 * ((2.0*t.getNoNo())/(numberOfSiblings+1)));
+//							t.pos = t.getFather().pos+ (maxBorder-minBorder)/2.0 * ((2.0*t.noNo)/numberOfSiblings);
+	//						System.out.println(t.getFirstName() + "pos: " + (t.getFather().pos+ (maxBorder-minBorder)/2.0 * ((1+2.0*t.noNo)/numberOfSiblings)));
 						}
 						else {
-							treebutton.setLayoutX(t.getFather().pos+30);
-							t.pos = t.getFather().pos;
+							double minBorder = t.getFather().getXPos() - 564.0/(treeLevel+0.5);
+							double maxBorder = t.getFather().getXPos() + 564.0/(treeLevel+0.5);
+	//						System.out.println("minBorder " + minBorder);
+	//						System.out.println("maxBorder " + maxBorder);
+	//						System.out.println("t.getFather().pos " + t.getFather().pos);
+	
+							treebutton.setLayoutX(t.getFather().getXPos()+ 30 + (maxBorder-minBorder)/2.0 * ((2.0*t.getNoNo())/(numberOfSiblings+1)));
+//							t.pos = t.getFather().pos+ 30 + (maxBorder-minBorder)/2.0 * ((2.0*t.noNo)/numberOfSiblings);
+//							System.out.println(t.getFirstName() + "pos: " + (t.getFather().pos+ (maxBorder-minBorder)/2.0 * ((1+2.0*t.noNo)/numberOfSiblings)));
 						}
-						
-//						System.out.println("node : " + t.getFirstName() + ", pos: " + t.pos);
 					}
-
+					else {
+						if(t.getMother() == null) {
+	//						System.out.println("t.getFather().pos " + t.getFather().pos);
+							treebutton.setLayoutX(t.getFather().getXPos());
+//							t.pos = t.getFather().pos;
+		//					System.out.println("node : " + t.getFirstName() + ", pos: " + t.pos);
+						}
+						else {
+	//						System.out.println("t.getFather().pos " + t.getFather().pos);
+							if(t.getFather()==null) {
+								treebutton.setLayoutX(t.getMother().getXPos());
+//								t.pos = t.getMother().pos;
+	//							System.out.println("node : " + t.getFirstName() + ", pos: " + t.pos);
+							}
+							else {
+								treebutton.setLayoutX(t.getFather().getXPos()+30);
+//								t.pos = t.getFather().pos;
+							}
+							
+	//						System.out.println("node : " + t.getFirstName() + ", pos: " + t.pos);
+						}
+	
+					}
 				}
 			}
 //			System.out.println(t.getFirstName() + " x: " + t.getTreeLevel());
@@ -593,10 +707,26 @@ public class TreeScreen extends Application{
 					for(Toggle t : tgs) {
 						ToggleButton current = (ToggleButton) t;
 						if(current.isSelected()) {
-							current.setStyle("-fx-background-color: #EEE8AA; -fx-border-width: 2px;-fx-border-color: #006400");
+							if(current.getStyle() == "-fx-background-color: #87CEFA; -fx-border-width: 2px;-fx-border-color: #006400") {
+								current.setStyle("-fx-background-color: #87CEFA; -fx-border-width: 3px;-fx-border-color: #EEE8AA");
+							}
+							else if(current.getStyle() == "-fx-background-color: #FFB6C1; -fx-border-width: 2px;-fx-border-color: #006400"){
+								current.setStyle("-fx-background-color: #FFB6C1; -fx-border-width: 3px;-fx-border-color: #EEE8AA");
+//								treebutton.setStyle("-fx-background-color: #FFB6C1; -fx-border-width: 2px;-fx-border-color: #006400");
+							}
+//							current.setStyle("-fx-background-color: #EEE8AA; -fx-border-width: 2px;-fx-border-color: #006400");
 						}
+//						Color.gold
 						else {
-							current.setStyle("-fx-background-color: #98FB98; -fx-border-width: 2px;-fx-border-color: #006400");
+//							System.out.println(current.getStyle());
+							if(current.getStyle() == "-fx-background-color: #87CEFA; -fx-border-width: 3px;-fx-border-color: #EEE8AA") {
+								current.setStyle("-fx-background-color: #87CEFA; -fx-border-width: 2px;-fx-border-color: #006400");
+							}
+							else if(current.getStyle() == "-fx-background-color: #FFB6C1; -fx-border-width: 3px;-fx-border-color: #EEE8AA"){
+								current.setStyle("-fx-background-color: #FFB6C1; -fx-border-width: 2px;-fx-border-color: #006400");
+//								treebutton.setStyle("-fx-background-color: #FFB6C1; -fx-border-width: 2px;-fx-border-color: #006400");
+							}
+//							current.setStyle("-fx-background-color: #98FB98; -fx-border-width: 2px;-fx-border-color: #006400");
 						}
 					}
 					firstnameText.setText(t.getFirstName());
@@ -621,8 +751,8 @@ public class TreeScreen extends Application{
 			treebutton.addEventFilter(MouseEvent.MOUSE_CLICKED, nodeEvent);
 //			treebutton.setOnAction(evt -> {if(treebutton.isSelected()) {treebutton.setStyle("-fx-background-color: #EEE8AA");} else{treebutton.setStyle("-fx-background-color: #006400");}});
 
-			t.pos = treebutton.getLayoutX();
-			System.out.println("firstname: " + t.getFirstName() + ", x pos: " + treebutton.getLayoutX());
+			t.setXPos(treebutton.getLayoutX());
+//			System.out.println("firstname: " + t.getFirstName() + ", x pos: " + treebutton.getLayoutX());
 			root.getChildren().add(treebutton);
 			tbA[i] = treebutton;
 			if(t.getTreeLevel() == levelWithMaxNodes && siblingTrees.contains(t)) {
@@ -635,29 +765,29 @@ public class TreeScreen extends Application{
 			if(t.getMother() != null) {
 //				System.out.println("mother: " +t.getMother().getFirstName());
 //				System.out.println(t.getMother().pos);
-				Line m = new Line(t.pos+25, t.ypos, t.getMother().pos+25, t.getMother().ypos+50);
-				m.setStyle("-fx-stroke: #FFB6C1");
+				Line m = new Line(t.getXPos()+25, t.getYPos(), t.getMother().getXPos()+25, t.getMother().getYPos()+50);
+				m.setStyle("-fx-stroke: #FFFFFF");
 //				System.out.println("firstname: "+ t.getFirstName());
 				root.getChildren().add(m);
 			}
 			if(t.getFather() != null) {
 //				System.out.println("mother: " +t.getMother().getFirstName());
 //				System.out.println(t.getMother().pos);
-				Line m = new Line(t.pos+25, t.ypos, t.getFather().pos+25, t.getFather().ypos+50);
-				m.setStyle("-fx-stroke: #00FFFF");
+				Line m = new Line(t.getXPos()+25, t.getYPos(), t.getFather().getXPos()+25, t.getFather().getYPos()+50);
+				m.setStyle("-fx-stroke: #000000");
 //				System.out.println("firstname: "+ t.getFirstName());
 				root.getChildren().add(m);
 			}
 			if(t.getSpouse() != null && t.getMale()) {
 				Circle ring1 = new Circle(2.5, Color.MEDIUMSEAGREEN);
 				ring1.setStroke(Color.GOLD);
-				ring1.setCenterX(t.pos +54);
-				ring1.setCenterY(t.ypos + 25);
+				ring1.setCenterX(t.getXPos() +54);
+				ring1.setCenterY(t.getYPos() + 25);
 				root.getChildren().add(ring1);
 				Circle ring2 = new Circle(2.5, Color.MEDIUMSEAGREEN);
 				ring2.setStroke(Color.GOLD);
-				ring2.setCenterX(t.pos +57);
-				ring2.setCenterY(t.ypos + 25);
+				ring2.setCenterX(t.getXPos() +57);
+				ring2.setCenterY(t.getYPos() + 25);
 				root.getChildren().add(ring2);
 				Shape s = Shape.intersect(ring1, ring2);
 				s.setFill(Color.TRANSPARENT);
@@ -674,29 +804,53 @@ public class TreeScreen extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("FamilyTree");
 		primaryStage.show();
+//		System.out.println("-----------SUSI\n " + Susi + "\n------------------\n\n");
+
 	}
 	
 
 	public void allocateChildPositions(Tree parent, int numberOfSiblings) {
+		if(numberOfSiblings == 1) {
+			parent.getChildren().get(0).setNoNo(-1);
+			parent.getChildren().get(1).setNoNo(1);
+
+		}
+		else {
 		double middle = numberOfSiblings/2.0;
 //		System.out.println("middle " + middle);
 //		if(numberOfSiblings % 2 != 0) {
-//			parent.getChildren().get((int)middle).noNo = -1;
+//			parent.getChildren().get((int)middle).noNo = 0;
 //		}
+//		int i = (int) Math.round(-middle)-1;
+//		System.out.println("i" + i);
+//		for(int j = 0; j<middle; j++) {
+//			parent.getChildren().get(j).noNo = i;
+//			i++;
+//			System.out.println("here: "+ parent.getChildren().get(j).getFirstName() + " j : "+ j);
+//		}
+//		i = (int) Math.round(middle);
+//		for(int k = (int) Math.ceil(middle); k<parent.getChildren().size(); k++) {
+//			parent.getChildren().get(k).noNo = i;
+//			i++;
+//
+//		}
+		
 		int counter = 1;
 		for(int i = 0; i<parent.getChildren().size(); i++) {
 			if(numberOfSiblings-i > middle) {
-				parent.getChildren().get(i).noNo = -counter;
+				parent.getChildren().get(i).setNoNo(-counter);
 //				System.out.println(parent.getChildren().get(i).getFirstName() + " noNO: " + parent.getChildren().get(i).noNo);
 				counter--;
 			}
 			else {
-				parent.getChildren().get(i).noNo = counter;
+				parent.getChildren().get(i).setNoNo(counter);
 				counter++;
 //				System.out.println(parent.getChildren().get(i).getFirstName() + " noNO: " + parent.getChildren().get(i).noNo);
 
 			}
 		}
+		}
+		
 	}
 	
 	
