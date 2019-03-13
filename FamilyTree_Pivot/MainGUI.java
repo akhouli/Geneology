@@ -464,7 +464,7 @@ public class MainGUI extends Application {
 			}
 		};
 		
-		//CREATING A NODE EVENT 
+		//CREATING A NODE EVENT -------------------------------------------------------------------------------------------------------
 		
 		EventHandler<MouseEvent> CreateNew = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
@@ -484,50 +484,159 @@ public class MainGUI extends Application {
 			stage.setScene(createscreen);
 			}
 		else {
+			TableView<Tree1> newchosenList = new TableView<Tree1>();
+			ObservableList<Tree1> newlistdata= FXCollections.observableArrayList();
 			try {
-				BufferedWriter writer = new BufferedWriter(new FileWriter("src/FamilyTree_Pivot/newNode.txt",true));
-			writer.newLine();
-			String first = firstField.getText();
-			String last= lastField.getText();
-			writer.write(first.toString() + ",");
-			writer.write(last.toString() + ",");
+
+//				InputStream rid = new FileInputStream("src/Graphics/help.txt");
+
+			BufferedReader listreader = new BufferedReader(new FileReader("src/FamilyTree_Pivot/newNode.txt"));	
+			String a = "";
+			String line;
 			
-			if(birthDate.getValue() != null) {
-			String birth = birthDate.getValue().toString();
-			writer.write(birth.toString()+ ",");
-			}
-			if(birthcountry.getValue() != null) {
-			String birthplace = birthcountry.getValue().toString();
-			writer.write(birthplace.toString()+ ",");
-			}
-			if(genderMale.isSelected()) {
-				writer.write(genderMale.getText().toString()+ ",");
-			}
-			else {
-				writer.write(genderFemale.getText().toString()+ ",");
-			}
-			if(deathDate.getValue() != null) {
-				String death = deathDate.getValue().toString();
-				writer.write(death.toString()+ ",");
-			}
-			if(deathcountry.getValue() != null) {
-				String deathplace = deathcountry.getValue().toString();
-				writer.write(deathplace.toString()+ ",");
-				
-			}
-			if(biographyArea.getText() != null) {
-				String biog = biographyArea.getText().toString();
-				writer.write("(" +biog.toString()+ ").");
-			}
 			
-			  writer.close();
+				Tree1 t;
+			
+				while((line = listreader.readLine()) != null) {
+					String[] lineA = line.split(",");
+					String firstname = lineA[0];
+					String lastname = lineA[1];
+					String birthday = lineA[2];
+					String birthplace = lineA[3];
+					String bio = lineA[4];
+					
+						t = new Tree1(firstname, lastname, birthday, birthplace, bio);
+						newlistdata.add(t);
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			treeField.clear();
+			firstField.clear();
+			lastField.clear();
+			birthDate.setValue(null);
+			birthcountry.setValue(null);
+			deathDate.setValue(null);
+			deathcountry.setValue(null);
+			biographyArea.clear();
+
+			 final Label label = new Label("Search Tree Directory");
+		        label.setFont(new Font("Arial", 50));
+		        label.setTextFill(Color.IVORY);
+		        newchosenList.setEditable(true);
+
+		        TableColumn firstNameCol = new TableColumn("First Name");
+		        firstNameCol.setMinWidth(250);
+		        firstNameCol.setResizable(true);
+		        firstNameCol.setCellValueFactory(
+		                new PropertyValueFactory<Tree, String>("firstName"));
+
+		        TableColumn lastNameCol = new TableColumn("Last Name");
+		        lastNameCol.setMinWidth(250);
+		        lastNameCol.setResizable(true);
+		        lastNameCol.setCellValueFactory(
+		                new PropertyValueFactory<Tree, String>("lastName"));
+		        
+		        TableColumn birthCol = new TableColumn("Birth Date (YYYY-MM-DD)");
+		        birthCol.setMinWidth(250);
+		        birthCol.setCellValueFactory(
+		                new PropertyValueFactory<Tree, String>("birthday"));
+
+		        TableColumn treeCol = new TableColumn("Tree Name");
+		        treeCol.setMinWidth(250);
+		        treeCol.setResizable(true);
+		        treeCol.setCellValueFactory(
+		                new PropertyValueFactory<Tree, String>("treeName"));
+
+		        FilteredList<Tree1> flPerson = new FilteredList(newlistdata, p -> true);
+		        //Passing the data to a filtered list
+		        newchosenList.setItems(flPerson);
+		        //Setting the table's items using the filtered list
+		        newchosenList.getColumns().addAll(firstNameCol, lastNameCol, birthCol, treeCol);
+		  
+		        //Adding ChoiceBox and TextField here!
+		        ChoiceBox<String> choicelist = new ChoiceBox();
+		        choicelist.getItems().addAll("First Name", "Last Name", "Birth Date", "Tree Name");
+		        choicelist.setValue("First Name");
+		     
+		        TextField textField = new TextField();
+//		      
+		        
+		        textField.setPromptText("Search Tree here");
+		        textField.setOnKeyReleased(keyEvent ->
+		        {
+		            switch (choicelist.getValue())//Switch on choiceBox value
+		            {
+		                case "First Name":
+		                    flPerson.setPredicate(p -> p.getFirstName().toLowerCase().contains(textField.getText().toLowerCase().trim()));
+		                    //filter table by first name
+		                    break;
+		                case "Last Name":
+		                    flPerson.setPredicate(p -> p.getLastName().toLowerCase().contains(textField.getText().toLowerCase().trim()));
+		                    //filter table by last name
+		                    break;
+		                case "Birth Date":
+		                	 
+		                    flPerson.setPredicate(p -> p.getBirthday().toLowerCase().contains(textField.getText().toLowerCase().trim()));
+		                    //filter table by Birthday
+		                    break;
+		                case "Tree Name":
+		                    flPerson.setPredicate(p -> p.getTreeName().toLowerCase().contains(textField.getText().toLowerCase().trim()));
+		                    //filter table by Tree name
+		                    break;
+		            }
+		        });
+		//---------------------------------------------------------------------------------------------------------------------
+		        
+		        choicelist.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) ->
+		        {//reset table and textfield when new choice is selected
+		            if (newVal != null)
+		            {
+		                textField.setText("");
+		                flPerson.setPredicate(null);//This is same as saying flPerson.setPredicate(p->true);
+		            }
+		        });
+		        HBox hBoxlist = new HBox(choicelist, textField);//Add choiceBox and textField to hBox
+		        hBoxlist.setAlignment(Pos.CENTER);//Center HBox
+		        final VBox vboxlist = new VBox();
+		        vboxlist.setSpacing(100);
+		        vboxlist.setPadding(new Insets(10, 0, 0, 10));
+		        vboxlist.getChildren().addAll(label, newchosenList, hBoxlist);
+		        viewTree.setLayoutX(920);
+		        viewTree.setLayoutY(780);
+		        viewTree.setScaleX(1.7);
+		        viewTree.setScaleY(1.7);
+				addParentButton.setLayoutX(230);
+				addParentButton.setLayoutY(590);
+				addParentButton.setMinWidth(100);
+				addSpouseButton.setLayoutX(470);
+				addSpouseButton.setLayoutY(590);
+				addSpouseButton.setMinWidth(100);
+				addChildButton.setLayoutX(700);
+				addChildButton.setLayoutY(590);
+				addChildButton.setMinWidth(100);
+				alterPersonButton.setLayoutX(230);
+				alterPersonButton.setLayoutY(627);
+				alterPersonButton.setMinWidth(100);
+				deletePersonButton.setLayoutX(660);
+				deletePersonButton.setLayoutY(627);
+				deletePersonButton.setMinWidth(100);
+				Scene scene = new Scene(new Group(), 1100, 850);
+				scene.setFill(Color.MEDIUMSEAGREEN);
+		        stage.setTitle("Search Tree");
+		        ((Group) scene.getRoot()).getChildren().addAll(vboxlist,backSearch,viewTree,addParentButton,addSpouseButton,deletePersonButton,alterPersonButton,addChildButton);
+
+		        stage.setScene(scene);
+		        stage.show();
+		        
+		}		
 		}
-		
-		}
-	};
+		};
 	//CREATE A NEW TREE MAIN MENU
 		EventHandler<MouseEvent> createEvent = new EventHandler<MouseEvent>() {
 			@Override
@@ -570,7 +679,7 @@ public class MainGUI extends Application {
 		};
 		
 		//Search For Tree MAIN MENU
-		EventHandler<MouseEvent> seachingEvent = new EventHandler<MouseEvent>() {
+		EventHandler<MouseEvent> searchingEvent = new EventHandler<MouseEvent>() {
 			@Override
 	public void handle(MouseEvent event) {
 				viewTree.setLayoutX(920);
@@ -1203,7 +1312,7 @@ public class MainGUI extends Application {
        backSearch.addEventFilter(MouseEvent.MOUSE_CLICKED, backfromSearch);
        helpButton.addEventFilter(MouseEvent.MOUSE_CLICKED, helpEvent);
        Create.addEventFilter(MouseEvent.MOUSE_CLICKED, createEvent);
-       Search.addEventFilter(MouseEvent.MOUSE_CLICKED, seachingEvent);
+       Search.addEventFilter(MouseEvent.MOUSE_CLICKED, searchingEvent);
        submit.addEventFilter(MouseEvent.MOUSE_CLICKED, submitEvent);
        Add.addEventFilter(MouseEvent.MOUSE_CLICKED, CreateNew);
        viewTree.addEventFilter(MouseEvent.MOUSE_CLICKED, searchResultEvent);
