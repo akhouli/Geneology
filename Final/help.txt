@@ -1,0 +1,11 @@
+Welcome to Family Tree
+-----------------------
+
+About us:
+----------
+
+Family Tree is a Geneology Ancestry application that allows you to create your family tree and browse it hierarchically.
+
+Main Menu:
+-----------
+
