@@ -1,6 +1,7 @@
 package Final;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -9,7 +10,14 @@ public class DB {
 	static int currentPID;
 	static int currentTreeID;
 	static String currentTree;
+	static ArrayList<Logic> siblingTrees;
 	
+	public static ArrayList<Logic> getSiblingTrees() {
+		return siblingTrees;
+	}
+	public static void setSiblingTrees(ArrayList<Logic> siblingTrees) {
+		DB.siblingTrees = siblingTrees;
+	}
 	public static int getCurrentTreeID() {
 		return currentTreeID;
 	}
@@ -22,21 +30,13 @@ public class DB {
 	public static int updateCurrentPID(Tree1 treePID) {
 		try {
 		Class.forName("org.postgresql.Driver");
-
-		System.out.println("Connecting to database...");
-
-		
+	
 		Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
-
-		System.out.println("Connected...");
-		
-		
+	
 		Statement stmt = con.createStatement();
 
 		String sql = "Select (pid) From \"Java\".Person " + "WHERE firstname = '" + treePID.getFirstName() + "' and lastname = '" + treePID.getLastName() + "' and birthdate = '"
 					+ treePID.getBirthday() +"'";
-
-		System.out.println("Record added...");
 
 		ResultSet rs = stmt.executeQuery(sql);
 
@@ -56,60 +56,37 @@ public class DB {
 		
 		
 	try {
-		// STEP 2: initialize JDBC driver
 		Class.forName("org.postgresql.Driver");
-
-		// STEP 3: Open a connection
-		System.out.println("Connecting to database...");
-
-		
 		Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
-
-		System.out.println("Connected...");
-		
-		// STEP 4: Execute a query
-		
+				
 		Statement stmt = con.createStatement();
-//		
-//		Insert into familyconnect values(5,null,null,null)
+	
 		String sql = "Insert into \"Java\".treeconnect(familyname) " + "VALUES ('"+TreeField+"')";
-//		=TreeField;
 		currentTree = TreeField;
 		currentTree= "Select (tid) from \"Java\".treeconnect " + "WHERE familyname='"+currentTree+"'";
 		stmt.executeUpdate(sql);
-		System.out.println("Record added...");
 
 		ResultSet rs = stmt.executeQuery(currentTree);
-//		System.out.println(rs.next());
 		while(rs.next()) {
 			setCurrentTreeID(Integer.parseInt(rs.getString("tid")));
 		}
-		System.out.println(currentTreeID);
-//		currentTree = String.valueOf(stmt.executeUpdate(sql2));
-		// STEP 6: Clean-up environment			 
+		 
 		stmt.close();
 		con.close();
 	} catch (Exception e) {
 		System.out.println(e);
 	}
-	System.out.println("Goodbye!");
 
 }
 	public static void familyMemberCreate( String firstname, 
 		String lastname, String gender, LocalDate localDate,String birthplace,LocalDate DateofDeath,String deathPlace,String biography) {
 		try {
-			// STEP 2: initialize JDBC driver
 			Class.forName("org.postgresql.Driver");
 
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
 
 			
 			Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
 
-			System.out.println("Connected...");
-			
-			// STEP 4: Execute a query
 			String sql;
 			Statement stmt = con.createStatement();
 			if(DateofDeath != null && deathPlace != null) {
@@ -142,25 +119,216 @@ public class DB {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		System.out.println("Goodbye!");
 	}
 	
+	public static ArrayList<Logic> findFamilyMembersDisplay(int focusedID){
+		ArrayList<Logic> family = new ArrayList<>();
+		try {
+			Class.forName("org.postgresql.Driver");
+
+			Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
+			Statement stmt = con.createStatement();
+			Logic focused = DB_Alter.createLogic(focusedID);
+			focused.setTreeLevel(0);
+			family.add(focused);
+			String spouseIDQuery = "Select spouse from \"Java\".familyconnect where pid = " + focusedID;
+			
+			ResultSet spouseIDrs = stmt.executeQuery(spouseIDQuery);
+			int spouseID = 0;
+			while(spouseIDrs.next()) {
+				spouseID = spouseIDrs.getInt("spouse");
+			}
+			if(spouseID > 0) {
+				Logic spouse = DB_Alter.createLogic(spouseID);
+				focused.setSpouse(spouse);
+				spouse.setSpouse(focused);
+				spouse.setTreeLevel(0);
+	
+				family.add(spouse);
+			}
+
+			ArrayList<Logic> children = new ArrayList<>();
+			String childrenQuery;
+			if(focused.getMale()) {
+				childrenQuery = "Select pid from \"Java\".familyconnect where father = " + focusedID;
+			}
+			else {
+				childrenQuery = "Select pid from \"Java\".familyconnect where mother = " + focusedID;
+			}
+			ResultSet childrenIDrs = stmt.executeQuery(childrenQuery);
+
+			int childID;
+			Logic l;
+			while(childrenIDrs.next()) {
+				childID = childrenIDrs.getInt("pid");
+				l = DB_Alter.createLogic(childID);
+				if(focused.getMale()) {
+					l.setFather(focused);
+					if(focused.getSpouse() != null) {
+						l.setMother(focused.getSpouse());
+					}
+				}
+				else {
+					l.setMother(focused);
+					if(focused.getSpouse() != null) {
+						l.setFather(focused.getSpouse());
+					}
+				}
+				l.setTreeLevel(1);
+				children.add(l);
+			}
+			if(!children.isEmpty()) {
+				focused.setChildren(children);
+				if(focused.getSpouse() != null) {
+					focused.getSpouse().setChildren(children);
+				}
+				family.addAll(children);
+			}
+
+			//children's spouses
+			String childSpouseQuery;
+			for(Logic kid : children) {
+				if(kid.getMale()) {
+					childSpouseQuery = "Select pid from \"Java\".familyconnect where spouse = " + kid.getID();
+				}
+				else {
+					childSpouseQuery = "Select pid from \"Java\".familyconnect where spouse = " + kid.getID();
+				}
+				ResultSet childSpouseIDrs = stmt.executeQuery(childSpouseQuery);
+
+				int childSpouseID = 0;
+				while(childSpouseIDrs.next()) {
+					childSpouseID = childSpouseIDrs.getInt("pid");
+				}
+				if(childSpouseID > 0) {
+					l = DB_Alter.createLogic(childSpouseID);
+					kid.setSpouse(l);
+					l.setSpouse(kid);
+					l.setTreeLevel(1);
+		
+					family.add(l);
+				}
+			}
+			
+			
+			//father
+			String fatherIDQuery =  "Select father from \"Java\".familyconnect where pid = " + focusedID;
+			ResultSet fatherIDrs = stmt.executeQuery(fatherIDQuery);
+
+			int fatherID = 0;
+			while(fatherIDrs.next()) {
+				fatherID = fatherIDrs.getInt("father");
+			}
+			if(fatherID > 0) {
+				Logic father = DB_Alter.createLogic(fatherID);
+				focused.setFather(father);
+				father.setTreeLevel(-1);	
+				family.add(father);
+			}
+			
+			//mother
+			String motherIDQuery =  "Select mother from \"Java\".familyconnect where pid = " + focusedID;
+			ResultSet motherIDrs = stmt.executeQuery(motherIDQuery);
+
+			int motherID = 0;
+			while(motherIDrs.next()) {
+				motherID = motherIDrs.getInt("mother");
+			}
+			if(motherID > 0) {
+				Logic mother = DB_Alter.createLogic(motherID);
+				focused.setMother(mother);
+				mother.setTreeLevel(-1);	
+				if(focused.getFather() != null) {
+					focused.getFather().setSpouse(mother);
+					mother.setSpouse(focused.getFather());
+				}
+				family.add(mother);
+			}
+			
+			//siblings
+			ArrayList<Logic> siblings = new ArrayList<>();
+			String siblingsQuery;
+			if(focused.getFather() != null) {
+				siblingsQuery = "Select pid from \"Java\".familyconnect where father = " + fatherID + " and not pid = " + focusedID;
+			}
+			else if(focused.getMother() != null){
+				siblingsQuery = "Select pid from \"Java\".familyconnect where mother = " + motherID + " and not pid = " + focusedID;
+			}
+			else {
+				siblingsQuery = " ";
+			}
+			ResultSet siblingIDrs = stmt.executeQuery(siblingsQuery);
+
+			int siblingID;
+			while(siblingIDrs.next()) {
+				siblingID = siblingIDrs.getInt("pid");
+				l = DB_Alter.createLogic(siblingID);
+				
+				if(focused.getFather() != null) {
+					l.setFather(focused.getFather());
+				}
+				else if(focused.getMother() != null){
+					l.setMother(focused.getMother());
+				}
+				l.setTreeLevel(0);
+				siblings.add(l);
+			}
+			if(!siblings.isEmpty()) {
+				family.addAll(siblings);
+				siblings.add(focused);
+				if(focused.getFather() != null) {
+					focused.getFather().setChildren(siblings);
+				}
+				else if(focused.getMother() != null) {
+					focused.getMother().setChildren(siblings);
+				}
+			}
+
+			setSiblingTrees(siblings);
+			//sibling's spouses
+			String siblingSpouseQuery;
+			for(Logic sibling : siblings) {
+				if(sibling.getMale()) {
+					siblingSpouseQuery = "Select pid from \"Java\".familyconnect where spouse = " + sibling.getID();
+				}
+				else {
+					siblingSpouseQuery = "Select pid from \"Java\".familyconnect where spouse = " + sibling.getID();
+				}
+				ResultSet siblingSpouseIDrs = stmt.executeQuery(siblingSpouseQuery);
+
+				int siblingSpouseID = 0;
+				while(siblingSpouseIDrs.next()) {
+					siblingSpouseID = siblingSpouseIDrs.getInt("pid");
+				}
+				if(siblingSpouseID > 0) {
+					l = DB_Alter.createLogic(siblingSpouseID);
+					sibling.setSpouse(l);
+					l.setSpouse(sibling);
+					l.setTreeLevel(0);
+		
+					family.add(l);
+				}
+			}
+			
+			stmt.close();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return family;
+	}
 	public static ObservableList<Tree1> nodeListCreate() {
 		ObservableList<Tree1> newlistdata= FXCollections.observableArrayList();
 
 		try {
-			// STEP 2: initialize JDBC driver
 			Class.forName("org.postgresql.Driver");
 
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
+			
 
 			
 			Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
 
-			System.out.println("Connected...");
 			
-			// STEP 4: Execute a query
 			String sql = "Select * from \"Java\".Person where treeid="+currentTreeID;
 			String sql2 = "Select familyname from \"Java\".treeconnect where tid="+currentTreeID;
 
@@ -169,80 +337,135 @@ public class DB {
 			
 			ResultSet rs2 = stmt.executeQuery(sql2);
 
-//			System.out.println(rs.next());
 			Tree1 l;
 			String treename = "";
 			while(rs2.next()) {
 				treename = (rs2.getString("familyname"));
-				System.out.println("inner while");
 			}
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				System.out.println("outer while");
 				
 				l = new Tree1(rs.getString("firstname"), rs.getString("lastname"), rs.getDate("birthdate").toString(), 
 						treename);
 				newlistdata.add(l);
 			}
-			System.out.println(currentTreeID);		 
 			stmt.close();
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		System.out.println("Goodbye!");
 
 	
 		
 		return newlistdata;
 	}
-	public static ObservableList<Tree1> FullList() {
+	public static ObservableList<Tree1> nodeListSearch(int chosenPID) {
 		ObservableList<Tree1> newlistdata= FXCollections.observableArrayList();
 
 		try {
-			// STEP 2: initialize JDBC driver
 			Class.forName("org.postgresql.Driver");
 
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
 
 			
 			Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
 
-			System.out.println("Connected...");
 			
-			// STEP 4: Execute a query
-			String sql = "select p.*, t.familyname from \"Java\".treeconnect t, \"Java\".person p where p.treeid = t.tid";
-//			String sql = "Select * from \"Java\".Person";
-//			String sql2 = "Select familyname from \"Java\".treeconnect where tid="+currentTreeID;
-
+			String sql = "Select treeid from \"Java\".Person where "+ "(pid = "+chosenPID+ ")";
+			
 			Statement stmt = con.createStatement();
 			
 			
-//			ResultSet rs2 = stmt.executeQuery(sql2);
-
-//			System.out.println(rs.next());
-			Tree1 l;
-//			String treename = "";
-//			while(rs2.next()) {
-//				treename = (rs2.getString("familyname"));
-//				System.out.println("inner while");
-//			}
+			
 			ResultSet rs = stmt.executeQuery(sql);
+			Tree1 l;
+			int treeid = 0;
 			while(rs.next()) {
-				System.out.println("outer while");
-				
-				l = new Tree1(rs.getString("firstname"), rs.getString("lastname"), rs.getDate("birthdate").toString(), 
-						rs.getString("familyname"));
+				treeid = (rs.getInt("treeid"));
+			}
+			String sql2 = "Select familyname from \"Java\".treeconnect where tid="+treeid;
+
+			ResultSet rs2 = stmt.executeQuery(sql2);
+
+			String treename = "";
+			while(rs2.next()) {
+				treename = (rs2.getString("familyname"));
+			}
+			String sql3 = "Select * from \"Java\".Person where "+ "(treeid = "+treeid+ ")";
+			ResultSet rs3 = stmt.executeQuery(sql3);
+			
+			while(rs3.next()) {				
+				l = new Tree1(rs3.getString("firstname"), rs3.getString("lastname"), rs3.getDate("birthdate").toString(), 
+						treename);
 				newlistdata.add(l);
 			}
-			System.out.println(currentTreeID);		 
 			stmt.close();
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		System.out.println("Goodbye!");
+	return newlistdata;
+	}
+	public static ObservableList<Tree1> FullList() {
+		ObservableList<Tree1> newlistdata= FXCollections.observableArrayList();
+
+		try {
+			Class.forName("org.postgresql.Driver");
+
+
+			
+			Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
+
+			
+			String sql = "select p.*, t.familyname from \"Java\".treeconnect t, \"Java\".person p where p.treeid = t.tid";
+
+			Statement stmt = con.createStatement();
+			
+			Tree1 l;
+
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				
+				l = new Tree1(rs.getString("firstname"), rs.getString("lastname"), rs.getDate("birthdate").toString(), 
+						rs.getString("familyname"));
+						
+				newlistdata.add(l);
+			}
+			stmt.close();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+	
+		
+		return newlistdata;
+	}
+	public static ObservableList<Tree1> PostDeleteList(int treeid) {
+		ObservableList<Tree1> newlistdata= FXCollections.observableArrayList();
+
+		try {
+			Class.forName("org.postgresql.Driver");
+			
+			Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
+			
+			String sql = "select p.*, t.familyname from \"Java\".treeconnect t, \"Java\".person p where p.treeid = t.tid and p.treeid = " + treeid;
+
+			Statement stmt = con.createStatement();
+			
+			
+
+			Tree1 l;
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {				
+				l = new Tree1(rs.getString("firstname"), rs.getString("lastname"), rs.getDate("birthdate").toString(), 
+						rs.getString("familyname"));
+				newlistdata.add(l);
+			}
+			stmt.close();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 
 	
 		
@@ -252,32 +475,19 @@ public class DB {
 		ObservableList<Logic> newlistdata= FXCollections.observableArrayList();
 
 		try {
-			// STEP 2: initialize JDBC driver
 			Class.forName("org.postgresql.Driver");
-
-			// STEP 3: Open a connection
-			System.out.println("Connecting to database...");
-
 			
 			Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
 
-			System.out.println("Connected...");
 			
-			// STEP 4: Execute a query
 			String sql = "Select * from \"Java\".Person where treeid="+currentTreeID;
-//			String sql2 = "Select familyname from \"Java\".treeconnect where tid="+currentTreeID;
 
 			Statement stmt = con.createStatement();
 			
-			
-//			ResultSet rs2 = stmt.executeQuery(sql2);
-
-//			System.out.println(rs.next());
 			Logic l;
 			boolean male;
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
-				System.out.println("outer while");
 				if(rs.getString("gender")== "Female") {
 					male = false;
 				}
@@ -286,20 +496,40 @@ public class DB {
 				}
 				l = new Logic(rs.getInt("pid"), currentTreeID,rs.getString("firstname"), rs.getString("lastname"),male, rs.getDate("birthdate").toString(),rs.getString("birthplace").toString(),
 						rs.getDate("dateofdeath").toString(),rs.getString("deathplace"),rs.getString("biography"));
-				System.out.println(l);
 				newlistdata.add(l);
 			}
-			System.out.println(currentTreeID);		 
 			stmt.close();
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		System.out.println("Goodbye!");
-
 	
-		
 		return newlistdata;
+	}
+	public static int lookupTreeID(int nodeID) {
+		int treeid = 0;
+	try {
+		Class.forName("org.postgresql.Driver");
+
+		Connection con = DriverManager.getConnection("jdbc:postgresql://mod-databases-dubai.cs.bham.ac.uk:5432/axk1029", USER_Name, PASSWORD);
+
+		Statement stmt = con.createStatement();
+		String treeidQuery = "Select treeid from \"Java\".Person where "+ "(pid = "+nodeID+ ")";
+
+		ResultSet rs = stmt.executeQuery(treeidQuery);
+		
+		while(rs.next()) {
+			treeid = (rs.getInt("treeid"));
+		}
+		stmt.close();
+		con.close();
+	} catch (Exception e) {
+		System.out.println(e);
+	}
+	setCurrentTreeID(treeid);
+	DB_Alter.setCurrentTreeID(treeid);
+	return treeid;
+	
 	}
 	static final String USER_Name = "axk1029";
 	static final String PASSWORD = "woe+loss118";
