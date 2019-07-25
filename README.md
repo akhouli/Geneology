@@ -1,10 +1,6 @@
 # Geneology
 Welcome to Genology Family Tree
 -----------------------
-
-* About us:
--------------
-
 Genology Family Tree is a Geneology Ancestry application that allows you to create your family tree and browse it hierarchically.
 -----------------------------------------------------------------------------------------------------------------------
 This is a readme Guide text file that contains instructions on:
