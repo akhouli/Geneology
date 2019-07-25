@@ -12,7 +12,7 @@ This is a readme Guide text file that contains instructions on:
 1 - How to run and compile the Geneology Tree Application
 2 - Application Navigation
 
-=====================================================================================================================
+=======================================================
 
 The Geneology Repo contains:
 -----------------------------------
@@ -34,12 +34,12 @@ Or
 
 	2- You could run the MainGUI.java file located in the Java Source Code Folder.
 
-=====================================================================================================================
+=======================================================
 
 	The Application includes a help me button which guides users on how to operate and navigate the application.
 	The help.txt file is located in the JAR file folder if you wished to read it without launching the application.
 
-======================================================================================================================
+=======================================================
 
 * Main Menu:
 --------------
