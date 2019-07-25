@@ -6,7 +6,7 @@ The Geneology Repo contains:
 -----------------------------------
 
 	1- Master Branch :
-	-	Source Code
+	-	Source Code (Folder Named "Final")
 	2- Jar Branch:
 	-       JAR file (with images & help.txt) folder
 
