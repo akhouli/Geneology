@@ -2,19 +2,20 @@
 This is a readme Guide text file that contains instructions on how to run and compile the Geneology Tree Application
 =====================================================================================================================
 
-The Geneology Zip file contains:
+The Geneology Repo contains:
 -----------------------------------
 
-	1- Geology Tree - Team 1 - Documentation folder
-	2- Java Source Code folder
-	3- JAR file (with images & help.txt) folder
+	1- Master Branch :
+	-	Source Code
+	2- Jar Branch:
+	-       JAR file (with images & help.txt) folder
 
 --------------------------------------------------
 --------------------------------------------------
 
 Steps to Launch the Application
 ===================================
-	1- You can launch the application by simply running the JAR file "MainGUI.jar.
+	1- You can launch the application by simply running the JAR file in the Jar Branch "MainGUI.jar.
 
 Or
 --
