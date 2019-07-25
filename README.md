@@ -9,8 +9,8 @@ Genology Family Tree is a Geneology Ancestry application that allows you to crea
 -----------------------------------------------------------------------------------------------------------------------
 This is a readme Guide text file that contains instructions on:
 
-1 - How to run and compile the Geneology Tree Application
-2 - Application Navigation
+*1 - How to run and compile the Geneology Tree Application
+*2 - Application Navigation
 
 =======================================================
 
