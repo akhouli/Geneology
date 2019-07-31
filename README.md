@@ -23,12 +23,12 @@ The Geneology Repo contains:
 
 Steps to Launch the Application
 ===================================
-	1- You can launch the application by simply running the JAR file in the Jar Branch "MainGUI.jar.
+	* You can launch the application by simply running the JAR file in the Jar Branch "MainGUI.jar.
 
 Or
 --
 
-	2- You could run the MainGUI.java file located in the Java Source Code Folder.
+	* You could run the MainGUI.java file located in the Java Source Code Folder.
 
 =======================================================
 
@@ -42,11 +42,11 @@ Application Navigation:
 
 * Main Menu:
 --------------
--Create New Tree
--Search Existing Tree Directory
+* Create New Tree
+* Search Existing Tree Directory
 
 
-* Create New Tree:
+# Create New Tree:
 --------------------
 * 1 - Insert the name of your family tree and click submit.
 * 2 - Fill up your information (Note: Fields marked with "*" are compulsory)
@@ -57,7 +57,7 @@ Application Navigation:
    select the "Alter this Person's Information" button and alter the information entered.
 * 7- If you wanted to delete a person, select that person and click "Delete This Person".
 
-* Search Existing Tree Directory Tree:
+# Search Existing Tree Directory Tree:
 ----------------------------------------
 * 1- After having created your family tree you can view it from searching the tree directory
    by clicking the "Search Existing Tree Directory on the Main Menu"
@@ -73,7 +73,8 @@ Application Navigation:
 
 
 
-* Version: 1.0
+_Version: 1.0
+-------------
 Authors: Ahmad Khouli & Lilly Schwarzenbach
 
 
