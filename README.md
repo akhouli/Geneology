@@ -23,15 +23,17 @@ The Geneology Repo contains:
 
 Steps to Launch the Application
 ===================================
-	* You can launch the application by simply running the JAR file in the Jar Branch "MainGUI.jar".
+	 You can launch the application by simply running the JAR file in the Jar Branch "MainGUI.jar".
 
 Or
 --
 
-	* You could run the MainGUI.java file located in the Java Source Code Folder.
+	 You could run the MainGUI.java file located in the Java Source Code Folder.
 
 =======================================================
-Note:
+
+## Note:
+
 	The Application includes a help me button which guides users on how to operate and navigate the application.
 	The help.txt file is located in the JAR file folder if you wished to read it without launching the application.
 
@@ -40,7 +42,7 @@ Note:
 Application Navigation:
 ===================================
 
-* Main Menu:
+## Main Menu:
 --------------
 * Create New Tree
 * Search Existing Tree Directory
