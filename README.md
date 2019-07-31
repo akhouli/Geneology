@@ -5,7 +5,7 @@ Genology Family Tree is a Geneology Ancestry application that allows you to crea
 -----------------------------------------------------------------------------------------------------------------------
 This is a readme Guide text file that contains instructions on:
 
-* 1 - How to run and compile the Geneology Tree Application
+* 1 - How to run the Geneology Tree Application
 * 2 - Application Navigation
 
 =======================================================
@@ -23,7 +23,7 @@ The Geneology Repo contains:
 
 Steps to Launch the Application
 ===================================
-	* You can launch the application by simply running the JAR file in the Jar Branch "MainGUI.jar.
+	* You can launch the application by simply running the JAR file in the Jar Branch "MainGUI.jar".
 
 Or
 --
@@ -31,7 +31,7 @@ Or
 	* You could run the MainGUI.java file located in the Java Source Code Folder.
 
 =======================================================
-
+Note:
 	The Application includes a help me button which guides users on how to operate and navigate the application.
 	The help.txt file is located in the JAR file folder if you wished to read it without launching the application.
 
